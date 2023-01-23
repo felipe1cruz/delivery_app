@@ -26,7 +26,7 @@ const authenticate = async (userEmail, userPassword) => {
   return { nome: user.name,
     email: user.email,
     role: user.dataValues.role,
-    token
+    token,
    };
 };
 

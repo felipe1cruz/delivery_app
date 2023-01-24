@@ -1,10 +1,8 @@
 const express = require('express');
+const cors = require('cors');
 const loginRouter = require('../routes/loginRouter');
 const customerProducts = require('../routes/customerProductsRouter');
 const errorMiddleware = require('../middlewares/errorMiddleware');
-const cors = require('cors');
-
-
 
 const app = express();
 

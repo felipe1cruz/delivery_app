@@ -1,10 +1,17 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import CustomerProducts from '../pages/CustomerProducts';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
 
 function Routes() {
   return (
-    <Route path="/customer/products" component={ CustomerProducts } />
+    <Switch>
+      <Route path="/login" component={ Login } />
+      <Route path="/register" component={ Register } />
+      <Route path="/customer/products" component={ CustomerProducts } />
+      <Route exact path="/"><Redirect to="/login" /></Route>
+    </Switch>
   );
 }
 

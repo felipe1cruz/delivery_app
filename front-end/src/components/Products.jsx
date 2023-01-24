@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { requestData } from "../services/requests";
+import React, { useEffect, useState } from 'react';
+import { requestData } from '../services/requests';
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -21,20 +21,24 @@ function Products() {
       cardAddItem,
     };
   };
-  
+
   const addRmQuantity = ({ value }, id) => {
     switch (value) {
-      case '+':
-        setQuantity([...quantity, { id, valor: quantity.valor + 1 }])
-        break;
-      case '-':
-        setQuantity([...quantity, { id, valor: quantity.valor - 1 }])
-        break 
+    case '+':
+      setQuantity([...quantity,
+        { id, valor: quantity.valor + 1 }]);
+      break;
+    case '-':
+      setQuantity([...quantity,
+        { id, valor: quantity.valor - 1 }]);
+      break;
+    default:
+      break;
     }
-  }
+  };
 
   useEffect(() => {
-    requestData("/customer/products")
+    requestData('/customer/products')
       .then((response) => setProducts(response))
       .catch();
   }, [products]);
@@ -43,33 +47,45 @@ function Products() {
     <div>
       {products.map((product) => (
         <div
-          key={product.id}
-          style={{ border: "solid 1px #ccc", margin: "5px", padding: "5px" }}
+          key={ product.id }
+          style={ {
+            border: 'solid 1px #ccc',
+            margin: '5px',
+            padding: '5px' } }
         >
-          <div data-testid={dataTests(product.id).cardPrince}>{product.price}</div>
-          <div data-testid={dataTests(product.id).cardTitle}>{product.name}</div>
+          <div
+            data-testid={ dataTests(product.id).cardPrince }
+          >
+            {product.price}
+          </div>
+          <div
+            data-testid={ dataTests(product.id).cardTitle }
+          >
+            {product.name}
+          </div>
           <img
-            src={product.urlImage}
-            data-testid={dataTests(product.id).cardBgImage}
+            src={ product.urlImage }
+            alt={ product.urlImage }
+            data-testid={ dataTests(product.id).cardBgImage }
           />
           <button
-          type="button"
-          data-testid={dataTests(product.id).cardRmItem}
-          value="-"
-          onClick={ (e) => addRmQuantity(e.target) }
+            type="button"
+            data-testid={ dataTests(product.id).cardRmItem }
+            value="-"
+            onClick={ (e) => addRmQuantity(e.target) }
           >
             -
           </button>
           <input
             type="text"
-            data-testid={dataTests(product.id).cardQuantity}
-            value='0'
+            data-testid={ dataTests(product.id).cardQuantity }
+            value="0"
           />
           <button
-          type="button"
-          data-testid={dataTests(product.id).cardAddItem}
-          value="+"
-          onClick={ (e) => addRmQuantity(e.target, product.id) }
+            type="button"
+            data-testid={ dataTests(product.id).cardAddItem }
+            value="+"
+            onClick={ (e) => addRmQuantity(e.target, product.id) }
           >
             +
           </button>

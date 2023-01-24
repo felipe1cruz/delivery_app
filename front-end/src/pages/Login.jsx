@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { requestLogin } from '../services/requests';
 
@@ -11,7 +11,23 @@ const testIdBtnRegister = 'common_login__button-register';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [disableRegisterBtn, setDisableBtn] = useState(false);
   const history = useHistory();
+
+  function emailRegex(validEmailTest) {
+    const regex = /^[a-z0-9-_.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/ig;
+    return regex.test(validEmailTest);
+  }
+
+  useEffect(() => {
+    const fieldsValidation = () => {
+      const rangePassword = 6;
+      const validEmail = emailRegex(email);
+      const validPassword = password.length >= rangePassword;
+      return (validEmail && validPassword);
+    };
+    setDisableBtn(fieldsValidation());
+  }, [email, password]);
 
   const handleChange = (target) => {
     const { id, value } = target;
@@ -20,12 +36,16 @@ function Login() {
   };
 
   const makeLogin = async () => {
-    const data = await requestLogin('/login', { email, password });
-    if (!data) alert('Senha ou Usuário inválidos');
-    localStorage.setItem('user', JSON.stringify({ data }));
-    if (data.role === 'administrator') history.push('/admin/manage');
-    if (data.role === 'seller') history.push('/seller/orders');
-    if (data.role === 'customer') history.push('customer/products');
+    try {
+      const data = await requestLogin('/login', { email, password });
+      console.log(data);
+      localStorage.setItem('user', JSON.stringify({ data }));
+      if (data.role === 'administrator') history.push('/admin/manage');
+      if (data.role === 'seller') history.push('/seller/orders');
+      if (data.role === 'customer') history.push('customer/products');
+    } catch {
+      throw new Error('erro');
+    }
   };
 
   return (
@@ -58,6 +78,8 @@ function Login() {
         <button
           data-testid={ testIdBtnLogin }
           type="button"
+          onClick={ () => makeLogin() }
+          disabled={ !disableRegisterBtn }
         >
           Login
         </button>
@@ -65,7 +87,6 @@ function Login() {
           <button
             data-testid={ testIdBtnRegister }
             type="button"
-            onClick={ makeLogin() }
           >
             Ainda não tenho conta
           </button>

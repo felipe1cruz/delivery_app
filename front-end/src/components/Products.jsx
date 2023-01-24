@@ -3,7 +3,7 @@ import { requestData } from '../services/requests';
 
 function Products() {
   const [products, setProducts] = useState([]);
-  const [quantity, setQuantity] = useState([{ id: 0, valor: 0 }]);
+  const [quantity, setQuantity] = useState([]);
 
   const dataTests = (productId) => {
     const cardPrince = `customer_products__element-card-price-${productId}`;
@@ -25,12 +25,24 @@ function Products() {
   const addRmQuantity = ({ value }, id) => {
     switch (value) {
     case '+':
-      setQuantity([...quantity,
-        { id, valor: quantity.valor + 1 }]);
+      setQuantity([
+        ...quantity.filter((fil) => fil.id !== id),
+        {
+          id,
+          qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
+        },
+      ]);
       break;
     case '-':
-      setQuantity([...quantity,
-        { id, valor: quantity.valor - 1 }]);
+      setQuantity([
+        ...quantity.filter((fil) => fil.id !== id),
+        {
+          id,
+          qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
+            ? 0
+            : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
+        },
+      ]);
       break;
     default:
       break;
@@ -38,10 +50,19 @@ function Products() {
   };
 
   useEffect(() => {
+    localStorage.setItem('carrinho', JSON.stringify(quantity));
+  }, [quantity]);
+
+  useEffect(() => {
     requestData('/customer/products')
-      .then((response) => setProducts(response))
+      .then((response) => {
+        setProducts(response);
+        setQuantity([
+          ...response.map((ma) => ({ id: ma.id, qtds: 0 })),
+        ]);
+      })
       .catch();
-  }, [products]);
+  }, []);
 
   return (
     <div>
@@ -72,14 +93,17 @@ function Products() {
             type="button"
             data-testid={ dataTests(product.id).cardRmItem }
             value="-"
-            onClick={ (e) => addRmQuantity(e.target) }
+            onClick={ (e) => addRmQuantity(e.target, product.id) }
           >
             -
           </button>
           <input
             type="text"
             data-testid={ dataTests(product.id).cardQuantity }
-            value="0"
+            value={
+              quantity.filter((fil) => fil.id === product.id)[0] === undefined
+                ? 0 : quantity.filter((fil) => fil.id === product.id)[0].qtds
+            }
           />
           <button
             type="button"

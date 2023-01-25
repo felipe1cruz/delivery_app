@@ -12,19 +12,19 @@ describe('Avalia o funcionamento da tela de Login', () => {
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
     const botaoLogin = screen.getByRole('button', { name: /login/i });
-    const botaoCadastro = screen.getByRole('button', { name: /ainda não tenho conta/i });
+    const novaConta = screen.getByRole('button', { name: /ainda não tenho conta/i });
 
     expect(email).not.toBeInTheDocument();
     expect(senha).not.toBeInTheDocument();
     expect(botaoLogin).not.toBeInTheDocument();
-    expect(botaoCadastro).not.toBeInTheDocument();
+    expect(novaConta).not.toBeInTheDocument();
   });
 
   it('Clicar no botão de cadastro leva para a página de cadastro?', () => {
     const { history } = renderWithRouter(<App />);
-    const botaoCadastro = screen.getByRole('button', { name: /ainda não tenho conta/i });
+    const novaConta = screen.getByRole('button', { name: /ainda não tenho conta/i });
 
-    userEvent.click(botaoCadastro);
+    userEvent.click(novaConta);
     let page = history.location.pathname;
     expect(page).equal('/register');
 
@@ -32,7 +32,7 @@ describe('Avalia o funcionamento da tela de Login', () => {
     page = history.location.pathname;
     expec(page).equal('/login');
 
-    userEvent.click(botaoCadastro);
+    userEvent.click(novaConta);
     page = history.location.pathname;
     expect(page).equal('/register');
   });

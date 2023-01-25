@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { requestLogin } from '../services/requests';
+import { setToken } from '../services/requests';
 
 const testIdInputEmail = 'common_login__input-email';
 const testIdInputPassword = 'common_login__input-password';
@@ -39,7 +40,8 @@ function Login() {
     try {
       const data = await requestLogin('/login', { email, password });
       console.log(data);
-      localStorage.setItem('user', JSON.stringify({ data }));
+      setToken(data.token);
+      localStorage.setItem('user', JSON.stringify( data ));
       if (data.role === 'administrator') history.push('/admin/manage');
       if (data.role === 'seller') history.push('/seller/orders');
       if (data.role === 'customer') history.push('customer/products');

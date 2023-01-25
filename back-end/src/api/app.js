@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(loginRouter);
 app.use(customerProducts);
 app.get('/coffee', (_req, res) => res.status(418).end());
+app.use(express.static('public'));
 
 app.use(errorMiddleware);
 

@@ -22,7 +22,7 @@ const authenticate = async (userEmail, userPassword) => {
   if (!user) throw errorGenerate(400, 'Invalid fields');
 
   const token = generateToken(user.dataValues);
-  return { nome: user.name,
+  return { name: user.name,
     email: user.email,
     role: user.dataValues.role,
     token,

@@ -5,8 +5,8 @@ import userEvent from '@testing-library/user-event';
 import App from '../../App';
 import renderWithRouter from '../helpers/renderWithRouter';
 
-describe('Avalia o funcionamento da tela de Login', () => {
-  it('Os elementos básicos estão sendo exibidos?', () => {
+describe('Avalia a Tela de Login', () => {
+  it('1 - Os elementos básicos estão sendo exibidos?', () => {
     render(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
@@ -14,13 +14,13 @@ describe('Avalia o funcionamento da tela de Login', () => {
     const botaoLogin = screen.getByRole('button', { name: /login/i });
     const novaConta = screen.getByRole('button', { name: /ainda não tenho conta/i });
 
-    expect(email).not.toBeInTheDocument();
-    expect(senha).not.toBeInTheDocument();
-    expect(botaoLogin).not.toBeInTheDocument();
+    expect(email).toBeInTheDocument();
+    expect(senha).toBeInTheDocument();
+    expect(botaoLogin).toBeInTheDocument();
     expect(novaConta).not.toBeInTheDocument();
   });
 
-  it('Clicar no botão de cadastro leva para a página de cadastro?', () => {
+  it('2 - Clicar no botão de cadastro leva para a página de cadastro?', () => {
     const { history } = renderWithRouter(<App />);
     const novaConta = screen.getByRole('button', { name: /ainda não tenho conta/i });
 

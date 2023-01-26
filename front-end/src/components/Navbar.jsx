@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react';
-import Context from '../context/Context';
-import { useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import Context from '../context/Context';
 
 function Navbar() {
   const { token, setToken } = useContext(Context);
@@ -12,27 +11,27 @@ function Navbar() {
     localStorage.clear('user');
     setToken('');
     history.push('/');
-  }
+  };
 
   const getName = () => {
     let data = localStorage.getItem('user');
     data = JSON.parse(data);
     setName(data.name);
-  }
+  };
 
   const tokenValidation = () => {
     let data = localStorage.getItem('user');
-      data = JSON.parse(data);
-      if (token !==  data.token) {
-        history.push('/');
-      }
-      history.push('/customer/products');
-  }
+    data = JSON.parse(data);
+    if (token !== data.token) {
+      history.push('/');
+    }
+    history.push('/customer/products');
+  };
 
   useEffect(() => {
     getName();
     tokenValidation();
-  }, [])
+  }, []);
 
   return (
     <nav>

@@ -42,6 +42,7 @@ function Login() {
     try {
       const data = await requestLogin('/login', { email, password });
       localStorage.setItem('user', JSON.stringify(data));
+      setToken(data.token);
       if (data.role === 'administrator') history.push('/admin/manage');
       if (data.role === 'seller') history.push('/seller/orders');
       if (data.role === 'customer') history.push('customer/products');

@@ -29,16 +29,16 @@ function Products() {
 
   const handleQtds = (a) => {
     console.log(a);
-  }
+  };
 
   const redirecionar = () => {
     history.push('/customer/checkout');
   };
 
-  const formatarMoeda = (resulteFinal) => {
-    return resulteFinal.toLocaleString('pt-br',
-    { style: 'currency', currency: 'BRL' });
-  }
+  const formatarMoeda = (resulteFinal) => resulteFinal.toLocaleString(
+    'pt-br',
+    { style: 'currency', currency: 'BRL' },
+  );
 
   const calculatevaluesCards = () => {
     const filterValues = quantity.filter((value) => value.qtds !== 0);
@@ -93,7 +93,7 @@ function Products() {
             id: ma.id,
             title: ma.name,
             qtds: 0,
-            value: Number(ma.price)
+            value: Number(ma.price),
           })),
         ]);
       })
@@ -104,60 +104,60 @@ function Products() {
     <div>
       {products.map((product) => (
         <div
-          key={product.id}
-          style={{
+          key={ product.id }
+          style={ {
             border: 'solid 1px #ccc',
             margin: '5px',
-            padding: '5px'
-          }}
+            padding: '5px',
+          } }
         >
           <div
-            data-testid={dataTests(product.id).cardPrince}
+            data-testid={ dataTests(product.id).cardPrince }
           >
-            { `R$ ${formatarMoeda(product.price).replace('.',',')}` }
+            { `R$ ${formatarMoeda(product.price).replace('.', ',')}` }
           </div>
           <div
-            data-testid={dataTests(product.id).cardTitle}
+            data-testid={ dataTests(product.id).cardTitle }
           >
             {product.name}
           </div>
           <img
-            src={product.urlImage}
-            alt={product.urlImage}
-            data-testid={dataTests(product.id).cardBgImage}
-            width='100px'
+            src={ product.urlImage }
+            alt={ product.urlImage }
+            data-testid={ dataTests(product.id).cardBgImage }
+            width="100px"
           />
           <button
             type="button"
-            data-testid={dataTests(product.id).cardRmItem}
+            data-testid={ dataTests(product.id).cardRmItem }
             value="-"
-            onClick={(e) => addRmQuantity(
+            onClick={ (e) => addRmQuantity(
               e.target,
               product.id,
               product.price,
-              product.name
-            )}
+              product.name,
+            ) }
           >
             -
           </button>
           <input
             type="text"
-            min='0'
+            min="0"
             data-testid={ dataTests(product.id).cardQuantity }
             value={ quantity.filter((fil) => fil.id === product.id)[0] !== undefined
               && quantity.filter((fil) => fil.id === product.id)[0].qtds }
-              onChange={ (e) => handleQtds(e.target.value) }
-            />
+            onChange={ (e) => handleQtds(e.target.value) }
+          />
           <button
             type="button"
-            data-testid={dataTests(product.id).cardAddItem}
+            data-testid={ dataTests(product.id).cardAddItem }
             value="+"
-            onClick={(e) => addRmQuantity(
+            onClick={ (e) => addRmQuantity(
               e.target,
               product.id,
               product.price,
-              product.title
-            )}
+              product.title,
+            ) }
           >
             +
           </button>
@@ -165,20 +165,20 @@ function Products() {
       ))}
 
       <br />
-        <button
-          type='button'
-          data-testid='customer_products__button-cart'
-          onClick={ () => redirecionar() }
-          disabled={ cardValuePrinces === 'R$ 0,00' ? true : false }
+      <button
+        type="button"
+        data-testid="customer_products__button-cart"
+        onClick={ () => redirecionar() }
+        disabled={ cardValuePrinces === 'R$ 0,00' }
+      >
+        <span
+          data-testid="customer_products__checkout-bottom-value"
         >
-            <span
-              data-testid='customer_products__checkout-bottom-value'
-            >
-              {`Ver Carrinho: ${ cardValuePrinces }`}
-            </span>
-        </button>
+          {`Ver Carrinho: ${cardValuePrinces}`}
+        </span>
+      </button>
     </div>
-  
+
   );
 }
 

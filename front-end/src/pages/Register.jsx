@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { requestLogin } from '../services/requests';
+// import { setUserLocalStorage } from '../services/localStorage';
 
 const testIdInputName = 'common_register__input-name';
 const testIdInputEmail = 'common_register__input-email';
@@ -14,6 +16,7 @@ function Register() {
   const [password, setPassword] = useState('');
   const [disableRegisterBtn, setDisableBtn] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState(true);
+  const history = useHistory();
 
   function emailRegex(validEmailTest) {
     const regex = /^[a-z0-9-_.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/ig;
@@ -25,6 +28,18 @@ function Register() {
     if (id === 'nameId') setName(value);
     if (id === 'emailId') setEmail(value);
     if (id === 'passwordId') setPassword(value);
+  };
+
+  const userRegister = async () => {
+    try {
+      await requestLogin('/create', { name, email, password });
+      const data = await requestLogin('/login', { email, password });
+      localStorage.setItem('user', JSON.stringify(data));
+
+      history.push('/customer/products');
+    } catch (error) {
+      setInvalidMessage(false);
+    }
   };
 
   useEffect(() => {
@@ -83,6 +98,7 @@ function Register() {
           data-testid={ testIdBtnRegister }
           type="button"
           disabled={ !disableRegisterBtn }
+          onClick={ userRegister }
         >
           Cadastrar
         </button>

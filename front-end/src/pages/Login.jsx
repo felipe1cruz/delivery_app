@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { requestLogin } from '../services/requests';
+import Context from '../context/Context';
 
 const testIdInputEmail = 'common_login__input-email';
 const testIdInputPassword = 'common_login__input-password';
@@ -9,6 +10,7 @@ const testIdBtnRegister = 'common_login__button-register';
 const testIdInvalidMessage = 'common_login__element-invalid-email';
 
 function Login() {
+  const { setToken } = useContext(Context);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [disableRegisterBtn, setDisableBtn] = useState(false);
@@ -39,8 +41,8 @@ function Login() {
   const makeLogin = async () => {
     try {
       const data = await requestLogin('/login', { email, password });
-
       localStorage.setItem('user', JSON.stringify(data));
+      setToken(data.token);
       if (data.role === 'administrator') history.push('/admin/manage');
       if (data.role === 'seller') history.push('/seller/orders');
       if (data.role === 'customer') history.push('customer/products');

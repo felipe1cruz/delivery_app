@@ -19,7 +19,7 @@ const authenticate = async (userEmail, userPassword) => {
     where: { email: userEmail, password: cryptoPassword },
   });
 
-  if (!user) throw errorGenerate(400, 'Invalid fields');
+  if (!user) throw errorGenerate(404, 'Not found');
 
   const token = generateToken(user.dataValues);
   return { name: user.name,

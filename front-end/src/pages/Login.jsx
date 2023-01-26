@@ -7,13 +7,14 @@ const testIdInputEmail = 'common_login__input-email';
 const testIdInputPassword = 'common_login__input-password';
 const testIdBtnLogin = 'common_login__button-login';
 const testIdBtnRegister = 'common_login__button-register';
-// const testIdInvalidMessage = 'common_login__element-invalid-email';
+const testIdInvalidMessage = 'common_login__element-invalid-email';
 
 function Login() {
   const { setToken } = useContext(Context);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [disableRegisterBtn, setDisableBtn] = useState(false);
+  const [invalidMessage, setInvalidMessage] = useState(true);
   const history = useHistory();
 
   function emailRegex(validEmailTest) {
@@ -40,13 +41,12 @@ function Login() {
   const makeLogin = async () => {
     try {
       const data = await requestLogin('/login', { email, password });
-      localStorage.setItem('user', JSON.stringify( data ));
-      setToken(data.token);
+      localStorage.setItem('user', JSON.stringify(data));
       if (data.role === 'administrator') history.push('/admin/manage');
       if (data.role === 'seller') history.push('/seller/orders');
       if (data.role === 'customer') history.push('customer/products');
     } catch {
-      throw new Error('erro');
+      setInvalidMessage(false);
     }
   };
 
@@ -94,6 +94,13 @@ function Login() {
           </button>
         </Link>
       </form>
+      <div
+        hidden={ invalidMessage }
+        data-testid={ testIdInvalidMessage }
+      >
+        Email ou senha invalido!
+
+      </div>
     </div>
   );
 }

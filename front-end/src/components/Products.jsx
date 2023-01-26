@@ -17,8 +17,6 @@ function Products() {
     const cardRmItem = `${prefixoCP}button-card-rm-item-${productId}`;
     const cardQuantity = `${prefixoCP}input-card-quantity-${productId}`;
     const cardAddItem = `${prefixoCP}button-card-add-item-${productId}`;
-    const cardButton = `${prefixoCP}button-cart${productId}`;
-    const cardButtonValue = `${prefixoCP}checkout-bottom-value${productId}`;
     return {
       cardPrince,
       cardTitle,
@@ -26,30 +24,38 @@ function Products() {
       cardRmItem,
       cardQuantity,
       cardAddItem,
-      cardButton,
-      cardButtonValue,
     };
   };
+
+  const handleQtds = (a) => {
+    console.log(a);
+  }
 
   const redirecionar = () => {
     history.push('/customer/checkout');
   };
 
+  const formatarMoeda = (resulteFinal) => {
+    return resulteFinal.toLocaleString('pt-br',
+    { style: 'currency', currency: 'BRL' });
+  }
+
   const calculatevaluesCards = () => {
     const filterValues = quantity.filter((value) => value.qtds !== 0);
     const resulte = filterValues.map((ac) => (ac.qtds * ac.value));
     const resulteFinal = resulte.reduce((ac, va) => ac + va, 0);
-    const valorFormatado = resulteFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    setCardValuePrinces(valorFormatado);
+
+    setCardValuePrinces(formatarMoeda(resulteFinal));
   };
 
-  const addRmQuantity = ({ value }, id, price) => {
+  const addRmQuantity = ({ value }, id, price, title) => {
     switch (value) {
     case '+':
       setQuantity([
         ...quantity.filter((fil) => fil.id !== id),
         {
           id,
+          title,
           qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
           value: Number(price),
         },
@@ -60,6 +66,7 @@ function Products() {
         ...quantity.filter((fil) => fil.id !== id),
         {
           id,
+          title,
           qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
             ? 0
             : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
@@ -84,7 +91,7 @@ function Products() {
         setQuantity([
           ...response.map((ma) => ({
             id: ma.id,
-            title: ma.title,
+            title: ma.name,
             qtds: 0,
             value: Number(ma.price)
           })),
@@ -107,7 +114,7 @@ function Products() {
           <div
             data-testid={dataTests(product.id).cardPrince}
           >
-            {product.price}
+            { `R$ ${formatarMoeda(product.price).replace('.',',')}` }
           </div>
           <div
             data-testid={dataTests(product.id).cardTitle}
@@ -124,20 +131,33 @@ function Products() {
             type="button"
             data-testid={dataTests(product.id).cardRmItem}
             value="-"
-            onClick={(e) => addRmQuantity(e.target, product.id, product.price)}
+            onClick={(e) => addRmQuantity(
+              e.target,
+              product.id,
+              product.price,
+              product.name
+            )}
           >
             -
           </button>
           <input
             type="text"
-            data-testid={dataTests(product.id).cardQuantity}
-            value={quantity.filter((fil) => fil.id === product.id)[0] === undefined
-              ? 0 : quantity.filter((fil) => fil.id === product.id)[0].qtds} />
+            min='0'
+            data-testid={ dataTests(product.id).cardQuantity }
+            value={ quantity.filter((fil) => fil.id === product.id)[0] !== undefined
+              && quantity.filter((fil) => fil.id === product.id)[0].qtds }
+              onChange={ (e) => handleQtds(e.target.value) }
+            />
           <button
             type="button"
             data-testid={dataTests(product.id).cardAddItem}
             value="+"
-            onClick={(e) => addRmQuantity(e.target, product.id, product.price)}
+            onClick={(e) => addRmQuantity(
+              e.target,
+              product.id,
+              product.price,
+              product.title
+            )}
           >
             +
           </button>
@@ -145,20 +165,18 @@ function Products() {
       ))}
 
       <br />
-      <form>
         <button
-          type="submit"
-          data-testid={dataTests().cardButton}
+          type='button'
+          data-testid='customer_products__button-cart'
           onClick={ () => redirecionar() }
+          disabled={ cardValuePrinces === 'R$ 0,00' ? true : false }
         >
-            <div
-              data-testid={dataTests().cardButtonValue}
+            <span
+              data-testid='customer_products__checkout-bottom-value'
             >
               {`Ver Carrinho: ${ cardValuePrinces }`}
-            </div>
+            </span>
         </button>
-      </form>
-      
     </div>
   
   );

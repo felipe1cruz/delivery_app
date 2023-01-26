@@ -6,7 +6,8 @@ import { MemoryRouter } from 'react-router-dom';
 
 import App from '../../App';
 import renderWithRouter from '../helpers/renderWithRouter';
-import { validUser, invalidUser, registeredUser } from '../mocks/userMocks';
+import { validUser, invalidUser, customerUser,
+  sellerUser, adminUser } from '../mocks/userMocks';
 
 describe('#### Avalia a Tela de Login ####', () => {
   it('1 - Os elementos básicos estão sendo exibidos?', () => {
@@ -33,6 +34,7 @@ describe('#### Avalia a Tela de Login ####', () => {
     expect(history.location.pathname).toBe('/login');
     userEvent.click(novaConta);
     expect(history.location.pathname).toBe('/register');
+    expect(novaConta).not.toBeInTheDocument();
   });
 
   it('3 - A rota "/" é redirecionada para "/login"?', async () => {
@@ -104,18 +106,48 @@ describe('#### Avalia a Tela de Login ####', () => {
     expect(msgLoginInvalido).toBeVisible();
   });
 
-  it('8 - Login pode ser feito com sucesso?', async () => {
+  it('8 - Customer pode logar com sucesso?', async () => {
     const { history } = renderWithRouter(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
     const botaoLogin = screen.getByRole('button', { name: /login/i });
 
-    userEvent.type(email, registeredUser.email);
-    userEvent.type(senha, registeredUser.senha);
+    userEvent.type(email, customerUser.email);
+    userEvent.type(senha, customerUser.senha);
     expect(botaoLogin).toBeEnabled();
     userEvent.click(botaoLogin);
     await waitForElementToBeRemoved(botaoLogin);
     expect(history.location.pathname).toBe('/customer/products');
+  });
+
+  it('9 - Seller pode logar com sucesso?', async () => {
+    const { history } = renderWithRouter(<App />);
+
+    const email = screen.getByRole('textbox', { name: /login/i });
+    const senha = screen.getByLabelText(/senha/i);
+    const botaoLogin = screen.getByRole('button', { name: /login/i });
+
+    userEvent.type(email, sellerUser.email);
+    userEvent.type(senha, sellerUser.senha);
+    expect(botaoLogin).toBeEnabled();
+    userEvent.click(botaoLogin);
+    await waitForElementToBeRemoved(botaoLogin);
+    expect(history.location.pathname).toBe('/seller/orders');
+  });
+
+  it('10 - Admin pode logar com sucesso?', async () => {
+    const { history } = renderWithRouter(<App />);
+
+    const email = screen.getByRole('textbox', { name: /login/i });
+    const senha = screen.getByLabelText(/senha/i);
+    const botaoLogin = screen.getByRole('button', { name: /login/i });
+
+    userEvent.type(email, adminUser.email);
+    userEvent.type(senha, adminUser.senha);
+    expect(botaoLogin).toBeEnabled();
+    userEvent.click(botaoLogin);
+    await waitForElementToBeRemoved(botaoLogin);
+    expect(history.location.pathname).toBe('/admin/manage');
   });
 });

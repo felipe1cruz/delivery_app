@@ -10,7 +10,7 @@ const invalidUser = {
   email: 'vi@rus@sem.no.cao.com',
 };
 
-const registeredUser = {
+const customerUser = {
   nome: 'Cliente Zé Birita',
   senha: '$#zebirita#$',
   email: 'zebirita@email.com',
@@ -18,8 +18,26 @@ const registeredUser = {
   senhaCriptografada: '1c37466c159755ce1fa181bd247cb925',
 };
 
+const adminUser = {
+  nome: 'Delivery App Admin',
+  senha: '--adm2@21!!--',
+  email: 'adm@deliveryapp.com',
+  role: 'administrator',
+  senhaCriptografada: 'a4c86edecc5aee06eff8fdeda69e0d04',
+};
+
+const sellerUser = {
+  nome: 'Fulana Pereira',
+  senha: 'fulana@123',
+  email: 'fulana@deliveryapp.com',
+  role: 'seller',
+  senhaCriptografada: '3c28d2b0881bf46457a853e0b07531c6',
+};
+
 export {
   validUser,
   invalidUser,
-  registeredUser,
+  customerUser,
+  adminUser,
+  sellerUser,
 };

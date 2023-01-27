@@ -14,17 +14,17 @@ const authenticate = async (userEmail, userPassword) => {
   const { error } = userSchema.validate({ email: userEmail, password: userPassword });
   if (error) throw errorGenerate(400, 'Some required fields are missing');
 
-  const user = await User.findOne({
+  const { dataValues: user } = await User.findOne({
     attributes: ['name', 'email', 'role'],
     where: { email: userEmail, password: cryptoPassword },
   });
 
   if (!user) throw errorGenerate(404, 'Not found');
 
-  const token = generateToken(user.dataValues);
+  const token = generateToken(user);
   return { name: user.name,
     email: user.email,
-    role: user.dataValues.role,
+    role: user.role,
     token,
    };
 };

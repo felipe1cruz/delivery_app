@@ -4,7 +4,18 @@ import Context from './Context';
 
 function Provider({ children }) {
   const [token, setToken] = useState('');
-  const memorize = React.useMemo(() => ({ token, setToken }), [token, setToken]);
+  const [pageCheckout, setPageCheckout] = useState(false);
+  const memorize = React.useMemo(() => ({
+    token,
+    setToken,
+    pageCheckout,
+    setPageCheckout,
+  }), [
+    token,
+    setToken,
+    pageCheckout,
+    setPageCheckout,
+  ]);
   return (
     <Context.Provider
       value={ memorize }

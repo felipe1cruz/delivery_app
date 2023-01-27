@@ -27,8 +27,22 @@ function Products() {
     };
   };
 
-  const handleQtds = (a) => {
-    console.log(a);
+  const handleQtds = (valor, productId, title, price) => {
+    if (valor >= 0) {
+      setQuantity([
+        ...quantity.filter((fil) => fil.id !== productId),
+        {
+          id: productId,
+          title,
+          qtds: Number(valor),
+          value: Number(price),
+        },
+      ]);
+    } else if (valor === '-' || valor === '+' || valor === '.') {
+      return 0;
+    } else {
+      return 0;
+    }
   };
 
   const redirecionar = () => {
@@ -44,43 +58,38 @@ function Products() {
     const filterValues = quantity.filter((value) => value.qtds !== 0);
     const resulte = filterValues.map((ac) => (ac.qtds * ac.value));
     const resulteFinal = resulte.reduce((ac, va) => ac + va, 0);
-
-    setCardValuePrinces(formatarMoeda(resulteFinal));
+    setCardValuePrinces(resulteFinal.toFixed(2));
   };
 
-  const addRmQuantity = ({ value }, id, price, title) => {
-    switch (value) {
-    case '+':
-      setQuantity([
-        ...quantity.filter((fil) => fil.id !== id),
-        {
-          id,
-          title,
-          qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
-          value: Number(price),
-        },
-      ]);
-      break;
-    case '-':
-      setQuantity([
-        ...quantity.filter((fil) => fil.id !== id),
-        {
-          id,
-          title,
-          qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
-            ? 0
-            : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
-          value: Number(price),
-        },
-      ]);
-      break;
-    default:
-      break;
-    }
+  const addQuantity = (id, price, title) => {
+    setQuantity([
+      ...quantity.filter((fil) => fil.id !== id),
+      {
+        id,
+        title,
+        qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
+        value: Number(price),
+      },
+    ]);
+  };
+
+  const rmQuantity = (id, price, title) => {
+    setQuantity([
+      ...quantity.filter((fil) => fil.id !== id),
+      {
+        id,
+        title,
+        qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
+          ? 0
+          : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
+        value: Number(price),
+      },
+    ]);
   };
 
   useEffect(() => {
-    localStorage.setItem('carrinho', JSON.stringify(quantity));
+    localStorage.setItem('carrinho', JSON.stringify(quantity
+       || { id: 0, title: '', qtds: 0, value: 0 }));
     calculatevaluesCards();
   }, [quantity]);
 
@@ -131,8 +140,7 @@ function Products() {
             type="button"
             data-testid={ dataTests(product.id).cardRmItem }
             value="-"
-            onClick={ (e) => addRmQuantity(
-              e.target,
+            onClick={ () => rmQuantity(
               product.id,
               product.price,
               product.name,
@@ -142,39 +150,46 @@ function Products() {
           </button>
           <input
             type="text"
-            min="0"
+            pattern="[0-9]+$"
             data-testid={ dataTests(product.id).cardQuantity }
-            value={ quantity.filter((fil) => fil.id === product.id)[0] !== undefined
-              && quantity.filter((fil) => fil.id === product.id)[0].qtds }
-            onChange={ (e) => handleQtds(e.target.value) }
+            value={
+              quantity.filter((fil) => fil.id === product.id).length > 0
+                && quantity.filter((fil) => fil.id === product.id)[0].qtds
+            }
+            // value={ 0 }
+            onChange={ (e) => handleQtds(
+              e.target.value,
+              product.id,
+              product.name,
+              product.price,
+            ) }
           />
+          { console.log() }
           <button
             type="button"
             data-testid={ dataTests(product.id).cardAddItem }
             value="+"
-            onClick={ (e) => addRmQuantity(
-              e.target,
+            onClick={ () => addQuantity(
               product.id,
               product.price,
-              product.title,
+              product.name,
             ) }
           >
             +
           </button>
         </div>
       ))}
-
-      <br />
       <button
         type="button"
         data-testid="customer_products__button-cart"
         onClick={ () => redirecionar() }
-        disabled={ cardValuePrinces === 'R$ 0,00' }
+        disabled={ cardValuePrinces === '0.00' }
       >
+        {'Ver Carrinho: R$ '}
         <span
           data-testid="customer_products__checkout-bottom-value"
         >
-          {`Ver Carrinho: ${cardValuePrinces}`}
+          { cardValuePrinces.toString().replace('.', ',') }
         </span>
       </button>
     </div>

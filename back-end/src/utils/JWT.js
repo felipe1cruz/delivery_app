@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const errorGenerate = require('./genericErrorHandler');
+require('dotenv/config');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'segredoJWT';
 

@@ -210,8 +210,6 @@ function Products() {
           </button>
         </div>
       ))}
-
-      <br />
       <button
         type="button"
         data-testid="customer_products__button-cart"

@@ -30,18 +30,18 @@ function Products() {
   const handleQtds = (valor, productId, title, price) => {
     if (valor >= 0) {
       setQuantity([
-          ...quantity.filter((fil) => fil.id !== productId),
-          {
-            id: productId,
-            title,
-            qtds: Number(valor),
-            value: Number(price),
-          },
-        ]);
-    } else if(valor === '-' || valor === '+' || valor === '.') {
-      0;
+        ...quantity.filter((fil) => fil.id !== productId),
+        {
+          id: productId,
+          title,
+          qtds: Number(valor),
+          value: Number(price),
+        },
+      ]);
+    } else if (valor === '-' || valor === '+' || valor === '.') {
+      return 0;
     } else {
-      0;
+      return 0;
     }
   };
 
@@ -61,46 +61,73 @@ function Products() {
     setCardValuePrinces(resulteFinal.toFixed(2));
   };
 
-  const addRmQuantity = ({ value }, id, price, title) => {
-    switch (value) {
-    case '+':
-      setQuantity([
-        ...quantity.filter((fil) => fil.id !== id),
-        {
-          id,
-          title,
-          qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
-          value: Number(price),
-        },
-      ]);
-      break;
-    case '-':
-      setQuantity([
-        ...quantity.filter((fil) => fil.id !== id),
-        {
-          id,
-          title,
-          qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
-            ? 0
-            : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
-          value: Number(price),
-        },
-      ]);
-      break;
-    default:
-      break;
-    }
+  const addQuantity = (id, price, title) => {
+    setQuantity([
+      ...quantity.filter((fil) => fil.id !== id),
+      {
+        id,
+        title,
+        qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
+        value: Number(price),
+      },
+    ]);
   };
 
+  const rmQuantity = (id, price, title) => {
+    setQuantity([
+      ...quantity.filter((fil) => fil.id !== id),
+      {
+        id,
+        title,
+        qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
+          ? 0
+          : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
+        value: Number(price),
+      },
+    ]);
+  };
+
+  // const addRmQuantity = ({ value }, id, price, title) => {
+  //   switch (value) {
+  //   case '+':
+  //     setQuantity([
+  //       ...quantity.filter((fil) => fil.id !== id),
+  //       {
+  //         id,
+  //         title,
+  //         qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
+  //         value: Number(price),
+  //       },
+  //     ]);
+  //     break;
+  //   case '-':
+  //     setQuantity([
+  //       ...quantity.filter((fil) => fil.id !== id),
+  //       {
+  //         id,
+  //         title,
+  //         qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
+  //           ? 0
+  //           : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
+  //         value: Number(price),
+  //       },
+  //     ]);
+  //     break;
+  //   default:
+  //     break;
+  //   }
+  // };
+
   useEffect(() => {
-    localStorage.setItem('carrinho', JSON.stringify(quantity || {id: 0, title: '', qtds: 0, value: 0}));
+    localStorage.setItem('carrinho', JSON.stringify(quantity
+       || { id: 0, title: '', qtds: 0, value: 0 }));
     calculatevaluesCards();
   }, [quantity]);
 
   useEffect(() => {
     requestData('/customer/products')
-    .then((response) => {
-      setProducts(response);
+      .then((response) => {
+        setProducts(response);
         setQuantity([
           ...response.map((ma) => ({
             id: ma.id,
@@ -144,8 +171,7 @@ function Products() {
             type="button"
             data-testid={ dataTests(product.id).cardRmItem }
             value="-"
-            onClick={ (e) => addRmQuantity(
-              e.target,
+            onClick={ () => rmQuantity(
               product.id,
               product.price,
               product.name,
@@ -153,7 +179,7 @@ function Products() {
           >
             -
           </button>
-          <input  
+          <input
             type="text"
             pattern="[0-9]+$"
             data-testid={ dataTests(product.id).cardQuantity }
@@ -165,7 +191,7 @@ function Products() {
             onChange={ (e) => handleQtds(
               e.target.value,
               product.id,
-              product.name, 
+              product.name,
               product.price,
             ) }
           />
@@ -174,8 +200,7 @@ function Products() {
             type="button"
             data-testid={ dataTests(product.id).cardAddItem }
             value="+"
-            onClick={ (e) => addRmQuantity(
-              e.target,
+            onClick={ () => addQuantity(
               product.id,
               product.price,
               product.name,
@@ -191,9 +216,9 @@ function Products() {
         type="button"
         data-testid="customer_products__button-cart"
         onClick={ () => redirecionar() }
-        disabled={ cardValuePrinces ===  '0.00' }
+        disabled={ cardValuePrinces === '0.00' }
       >
-        {`Ver Carrinho: R$ `}
+        {'Ver Carrinho: R$ '}
         <span
           data-testid="customer_products__checkout-bottom-value"
         >

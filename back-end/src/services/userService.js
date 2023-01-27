@@ -29,6 +29,24 @@ const authenticate = async (userEmail, userPassword) => {
    };
 };
 
+const createUser = async ({ name, email, password }) => {
+  const cryptoPassword = md5(password);
+  const checkCreatedUsers = await User.findOne({
+    where: {
+      email,
+    },
+  });
+
+  if (checkCreatedUsers) {
+    throw errorGenerate(409, 'User already registered');
+  }
+  const newUser = await User.create({ name, email, password: cryptoPassword, role: 'customer' });
+  
+  const token = generateToken(newUser.dataValues);
+  return token;
+};
+
 module.exports = {
   authenticate,
+  createUser,
 };

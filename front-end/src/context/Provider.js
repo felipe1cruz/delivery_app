@@ -4,7 +4,7 @@ import Context from './Context';
 
 function Provider({ children }) {
   const [token, setToken] = useState('');
-  const [pageCheckout, setPageCheckout] = useState(false);
+  const [pageCheckout, setPageCheckout] = useState('');
   const memorize = React.useMemo(() => ({
     token,
     setToken,

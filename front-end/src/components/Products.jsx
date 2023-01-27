@@ -87,37 +87,6 @@ function Products() {
     ]);
   };
 
-  // const addRmQuantity = ({ value }, id, price, title) => {
-  //   switch (value) {
-  //   case '+':
-  //     setQuantity([
-  //       ...quantity.filter((fil) => fil.id !== id),
-  //       {
-  //         id,
-  //         title,
-  //         qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
-  //         value: Number(price),
-  //       },
-  //     ]);
-  //     break;
-  //   case '-':
-  //     setQuantity([
-  //       ...quantity.filter((fil) => fil.id !== id),
-  //       {
-  //         id,
-  //         title,
-  //         qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
-  //           ? 0
-  //           : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
-  //         value: Number(price),
-  //       },
-  //     ]);
-  //     break;
-  //   default:
-  //     break;
-  //   }
-  // };
-
   useEffect(() => {
     localStorage.setItem('carrinho', JSON.stringify(quantity
        || { id: 0, title: '', qtds: 0, value: 0 }));

@@ -35,7 +35,6 @@ function Register() {
       await requestLogin('/create', { name, email, password });
       const data = await requestLogin('/login', { email, password });
       localStorage.setItem('user', JSON.stringify(data));
-
       history.push('/customer/products');
     } catch (error) {
       setInvalidMessage(false);

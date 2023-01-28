@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { requestLogin } from '../services/requests';
+import { requestLogin, requestData } from '../services/requests';
 
-function CustomerProducts() {
+function CustomerCheckout() {
   const testIdTotal = 'customer_checkout__element-order-total-price';
   const testIdSellerSelect = 'customer_checkout__select-seller';
   const testIdCustomerAdress = 'customer_checkout__input-address';
@@ -34,21 +34,33 @@ function CustomerProducts() {
   const [totalPrice, setTotalPrice] = useState('');
   const [deliveryAddress, setdeliveryAddress] = useState('');
   const [deliveryNumber, setdeliveryNumber] = useState('');
+  const [carrinho, setCarrinho] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    setSellers([{ id: 1, name: 'joao' }, { id: 2, name: 'maria' }]);
+    requestData('/sellers').then((response) => setSellers(response));
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user);
     setUserId(user.id);
-    setProducts([
-      { name: 'skol', qde: 1, price: 3.50 },
-      { name: 'brahma', qde: 2, price: 3.50 },
-      { name: 'sol', qde: 7, price: 1.00 }]);
-    setTotalPrice(products.reduce((acc, curr) => acc + curr.qde * curr.price, 0));
+    const productsCart = localStorage.getItem('carrinho');
+    console.log('productsCart', JSON.parse(productsCart));
+    setCarrinho(JSON.parse(productsCart));
   }, []);
 
   useEffect(() => {
   }, products);
+
+  const checkoutProducts = async () => {
+    console.log('funcao checkoutProducts', carrinho);
+    const cart = carrinho.filter((product) => product.qtds !== 0);
+    setProducts(cart);
+    setTotalPrice(products.reduce((acc, curr) => acc + curr.qtds * curr.value, 0));
+  };
+
+  useEffect(() => {
+    console.log('products', products);
+    checkoutProducts();
+  }, [carrinho]);
 
   const handleChange = (target) => {
     const { id, value } = target;
@@ -59,7 +71,7 @@ function CustomerProducts() {
   };
 
   const submitButton = () => {
-    const data = requestLogin('/customer/checkout', {
+    const newSale = {
       userId,
       sellerId,
       totalPrice,
@@ -67,13 +79,15 @@ function CustomerProducts() {
       deliveryNumber,
       saleDate: '2023-01-26 - 14:15:58',
       status: 'Pendente',
-    });
+    };
+    console.log(newSale);
+    const data = requestLogin('/customer/checkout', newSale);
     history.push(`/customer/orders/${data.id}`);
   };
 
   const rmButton = (name) => {
     console.log(name);
-    setProducts(products.filter((product) => product.name !== name));
+    setProducts(products.filter((product) => product.title !== name));
   };
 
   return (
@@ -95,27 +109,27 @@ function CustomerProducts() {
           <div
             data-testid={ dataTests(index).cardDescription }
           >
-            {product.name}
+            {product.title}
           </div>
           <div
             data-testid={ dataTests(index).cardQuantity }
           >
-            {product.qde}
+            {product.qtds}
           </div>
           <div
             data-testid={ dataTests(index).cardPrice }
           >
-            {product.price}
+            {product.value}
           </div>
           <div
             data-testid={ dataTests(index).cardSubtotal }
           >
-            {product.price * product.qde}
+            {product.value * product.qtds}
           </div>
           <button
             type="button"
             data-testid={ dataTests(index).cardRmItem }
-            name={ product.name }
+            name={ product.title }
             onClick={ (e) => rmButton(e.target.name) }
           >
             Remover
@@ -162,4 +176,4 @@ function CustomerProducts() {
   );
 }
 
-export default CustomerProducts;
+export default CustomerCheckout;

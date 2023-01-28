@@ -19,7 +19,17 @@ const createUser = async (req, res, next) => {
   }
 };
 
+const getSellers = async (req, res, next) => {
+  try {
+    const sellers = await userService.getSellers();
+    return res.status(201).json(sellers);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   user,
   createUser,
+  getSellers,
 };

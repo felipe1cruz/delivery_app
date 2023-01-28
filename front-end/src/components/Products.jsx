@@ -1,33 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { requestData } from '../services/requests';
-// import Context from '../context/Context';
+import dataTestsId from '../utils/dataTests/dataTestId';
+import dataTestsNoId from '../utils/dataTests/dataTestNoId';
+import Context from '../context/Context';
 
 function Products() {
+  const {
+    products,
+    setProducts,
+    quantity,
+    setQuantity,
+    cardValuePrinces,
+    setCardValuePrinces,
+  } = useContext(Context);
+
   const history = useHistory();
-  // const { setPageCheckout } = useContext(Context);
-  const [products, setProducts] = useState([]);
-  const [quantity, setQuantity] = useState([]);
-  const [cardValuePrinces, setCardValuePrinces] = useState(0);
-
-  const dataTests = (productId) => {
-    const prefixoCP = 'customer_products__';
-
-    const cardPrince = `${prefixoCP}element-card-price-${productId}`;
-    const cardTitle = `${prefixoCP}element-card-title-${productId}`;
-    const cardBgImage = `${prefixoCP}img-card-bg-image-${productId}`;
-    const cardRmItem = `${prefixoCP}button-card-rm-item-${productId}`;
-    const cardQuantity = `${prefixoCP}input-card-quantity-${productId}`;
-    const cardAddItem = `${prefixoCP}button-card-add-item-${productId}`;
-    return {
-      cardPrince,
-      cardTitle,
-      cardBgImage,
-      cardRmItem,
-      cardQuantity,
-      cardAddItem,
-    };
-  };
 
   const handleQtds = (valor, productId, title, price) => {
     if (valor >= 0) {
@@ -40,17 +28,10 @@ function Products() {
           value: Number(price),
         },
       ]);
-    } else if (valor === '-' || valor === '+' || valor === '.') {
-      return 0;
-    } else {
-      return 0;
     }
   };
 
-  const redirecionar = () => {
-    // setPageCheckout(true);
-    history.push('/customer/checkout');
-  };
+  const redirecionar = () => history.push('/customer/checkout');
 
   const formatarMoeda = (resulteFinal) => resulteFinal.toLocaleString(
     'pt-br',
@@ -124,24 +105,24 @@ function Products() {
           } }
         >
           <div
-            data-testid={ dataTests(product.id).cardPrince }
+            data-testid={ dataTestsId(product.id).cardPrince }
           >
             { `R$ ${formatarMoeda(product.price).replace('.', ',')}` }
           </div>
           <div
-            data-testid={ dataTests(product.id).cardTitle }
+            data-testid={ dataTestsId(product.id).cardTitle }
           >
             {product.name}
           </div>
           <img
             src={ product.urlImage }
             alt={ product.urlImage }
-            data-testid={ dataTests(product.id).cardBgImage }
+            data-testid={ dataTestsId(product.id).cardBgImage }
             width="100px"
           />
           <button
             type="button"
-            data-testid={ dataTests(product.id).cardRmItem }
+            data-testid={ dataTestsId(product.id).cardRmItem }
             value="-"
             onClick={ () => rmQuantity(
               product.id,
@@ -154,7 +135,7 @@ function Products() {
           <input
             type="text"
             pattern="[0-9]+$"
-            data-testid={ dataTests(product.id).cardQuantity }
+            data-testid={ dataTestsId(product.id).cardQuantity }
             value={
               quantity.filter((fil) => fil.id === product.id).length > 0
                 && quantity.filter((fil) => fil.id === product.id)[0].qtds
@@ -170,7 +151,7 @@ function Products() {
           { console.log() }
           <button
             type="button"
-            data-testid={ dataTests(product.id).cardAddItem }
+            data-testid={ dataTestsId(product.id).cardAddItem }
             value="+"
             onClick={ () => addQuantity(
               product.id,
@@ -184,13 +165,13 @@ function Products() {
       ))}
       <button
         type="button"
-        data-testid="customer_products__button-cart"
+        data-testid={ dataTestsNoId().buttonCart }
         onClick={ () => redirecionar() }
         disabled={ cardValuePrinces === '0.00' }
       >
         {'Ver Carrinho: R$ '}
         <span
-          data-testid="customer_products__checkout-bottom-value"
+          data-testid={ dataTestsNoId().buttonValue }
         >
           { cardValuePrinces.toString().replace('.', ',') }
         </span>

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { requestData } from '../services/requests';
+// import Context from '../context/Context';
 
 function Products() {
+  const history = useHistory();
+  // const { setPageCheckout } = useContext(Context);
   const [products, setProducts] = useState([]);
   const [quantity, setQuantity] = useState([]);
   const [cardValuePrinces, setCardValuePrinces] = useState(0);
-  const history = useHistory();
 
   const dataTests = (productId) => {
     const prefixoCP = 'customer_products__';
@@ -46,6 +48,7 @@ function Products() {
   };
 
   const redirecionar = () => {
+    // setPageCheckout(true);
     history.push('/customer/checkout');
   };
 

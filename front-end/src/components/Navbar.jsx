@@ -3,7 +3,12 @@ import { useHistory } from 'react-router-dom';
 import Context from '../context/Context';
 
 function Navbar() {
-  const { token, setToken } = useContext(Context);
+  const {
+    // token,
+    setToken,
+    // pageCheckout,
+    // setPageCheckout,
+  } = useContext(Context);
   const history = useHistory();
   const [name, setName] = useState('');
 
@@ -11,6 +16,7 @@ function Navbar() {
     localStorage.clear('user');
     setToken('');
     history.push('/');
+    // setPageCheckout(false);
   };
 
   const getName = () => {
@@ -19,18 +25,23 @@ function Navbar() {
     setName(data.name);
   };
 
-  const tokenValidation = () => {
-    let data = localStorage.getItem('user');
-    data = JSON.parse(data);
-    if (token !== data.token) {
-      history.push('/');
-    }
-    history.push('/customer/products');
-  };
+  // const tokenValidation = () => {
+  //   let data = localStorage.getItem('user');
+  //   data = JSON.parse(data);
+  //   if (token !== data.token) {
+  //     history.push('/');
+  //   }
+  //   // if (pageCheckout) {
+  //   //   history.push('/customer/checkout');
+  //   // } else {
+  //   //   history.push('/customer/products');
+  //   // }
+  // };
+  // console.log(tokenValidation);
 
   useEffect(() => {
     getName();
-    tokenValidation();
+    // tokenValidation();
   }, []);
 
   return (

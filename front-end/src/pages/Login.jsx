@@ -41,7 +41,10 @@ function Login() {
   const makeLogin = async () => {
     try {
       const data = await requestLogin('/login', { email, password });
-      localStorage.setItem('user', JSON.stringify(data));
+      localStorage.setItem('user', JSON.stringify(
+        { name: data.name, email: data.email, role: data.role, token: data.token },
+      ));
+      localStorage.setItem('userId', JSON.stringify({ id: data.id }));
       setToken(data.token);
       if (data.role === 'administrator') history.push('/admin/manage');
       if (data.role === 'seller') history.push('/seller/orders');

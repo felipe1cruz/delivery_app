@@ -25,20 +25,6 @@ function Navbar() {
     setName(data.name);
   };
 
-  // const tokenValidation = () => {
-  //   let data = localStorage.getItem('user');
-  //   data = JSON.parse(data);
-  //   if (token !== data.token) {
-  //     history.push('/');
-  //   }
-  //   // if (pageCheckout) {
-  //   //   history.push('/customer/checkout');
-  //   // } else {
-  //   //   history.push('/customer/products');
-  //   // }
-  // };
-  // console.log(tokenValidation);
-
   useEffect(() => {
     getName();
     // tokenValidation();

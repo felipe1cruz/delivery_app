@@ -97,7 +97,7 @@ function Register() {
           data-testid={ testIdBtnRegister }
           type="button"
           disabled={ !disableRegisterBtn }
-          onClick={ userRegister }
+          onClick={ () => userRegister() }
         >
           Cadastrar
         </button>

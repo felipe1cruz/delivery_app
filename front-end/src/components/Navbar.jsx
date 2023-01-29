@@ -25,7 +25,7 @@ function Navbar() {
     if (token !== data.token) {
       history.push('/');
     }
-    history.push('/customer/products');
+    // history.push('/customer/products');
   };
 
   useEffect(() => {

@@ -11,4 +11,6 @@ router.post('/create', userController.createUser);
 
 router.get('/sellers', userController.getSellers);
 
+router.get('/userid', userController.getUserId);
+
 module.exports = router;

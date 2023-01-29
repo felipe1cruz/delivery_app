@@ -45,7 +45,7 @@ function Products() {
     }
   };
 
-  const redirecionar = () => {
+  const redirecionar = async () => {
     history.push('/customer/checkout');
   };
 

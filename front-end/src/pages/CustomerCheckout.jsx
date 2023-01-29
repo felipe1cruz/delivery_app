@@ -31,34 +31,30 @@ function CustomerCheckout() {
   const [userId, setUserId] = useState('');
   const [sellerId, setSellerId] = useState(0);
   const [sellers, setSellers] = useState([]);
-  const [totalPrice, setTotalPrice] = useState('');
+  const [totalPrice, setTotalPrice] = useState(0);
   const [deliveryAddress, setdeliveryAddress] = useState('');
   const [deliveryNumber, setdeliveryNumber] = useState('');
   const [carrinho, setCarrinho] = useState([]);
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    requestData('/sellers').then((response) => setSellers(response));
-    const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user);
-    setUserId(user.id);
-    const productsCart = localStorage.getItem('carrinho');
-    console.log('productsCart', JSON.parse(productsCart));
-    setCarrinho(JSON.parse(productsCart));
-  }, []);
-
-  useEffect(() => {
-  }, products);
-
   const checkoutProducts = async () => {
-    console.log('funcao checkoutProducts', carrinho);
     const cart = carrinho.filter((product) => product.qtds !== 0);
     setProducts(cart);
-    setTotalPrice(products.reduce((acc, curr) => acc + curr.qtds * curr.value, 0));
+    console.log('funcao checkoutProducts', products);
   };
 
   useEffect(() => {
-    console.log('products', products);
+    requestData('/sellers').then((response) => setSellers(response));
+    const productsCart = localStorage.getItem('carrinho');
+    setCarrinho(JSON.parse(productsCart));
+    setUserId(1);
+  }, []);
+
+  useEffect(() => {
+    setTotalPrice(products.reduce((acc, curr) => acc + curr.qtds * curr.value, 0));
+  }, [products]);
+
+  useEffect(() => {
     checkoutProducts();
   }, [carrinho]);
 
@@ -68,6 +64,12 @@ function CustomerCheckout() {
     if (id === 'deliveryAddress') setdeliveryAddress(value);
     if (id === 'deliveryNumber') setdeliveryNumber(value);
     if (id === 'sellerId') setSellerId(value);
+  };
+
+  const formatarMoeda = (num) => {
+    let moeda = String(num);
+    moeda = moeda.replace('.', ',');
+    return `R$ ${moeda}`;
   };
 
   const submitButton = () => {
@@ -119,12 +121,12 @@ function CustomerCheckout() {
           <div
             data-testid={ dataTests(index).cardPrice }
           >
-            {product.value}
+            {formatarMoeda((product.value).toFixed(2))}
           </div>
           <div
             data-testid={ dataTests(index).cardSubtotal }
           >
-            {product.value * product.qtds}
+            {formatarMoeda((product.value * product.qtds).toFixed(2))}
           </div>
           <button
             type="button"
@@ -136,7 +138,10 @@ function CustomerCheckout() {
           </button>
         </div>
       ))}
-      <div data-testid={ testIdTotal }>{`Total: ${totalPrice}`}</div>
+      <div data-testid={ testIdTotal }>
+        {formatarMoeda(totalPrice.toFixed(2))}
+
+      </div>
       <p>P. Vendedora Responsável</p>
       <select
         data-testid={ testIdSellerSelect }

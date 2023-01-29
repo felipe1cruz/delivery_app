@@ -31,7 +31,6 @@ function Products() {
     }
   };
 
-
   const redirecionar = () => history.push('/customer/checkout');
 
   const formatarMoeda = (resulteFinal) => resulteFinal.toLocaleString(

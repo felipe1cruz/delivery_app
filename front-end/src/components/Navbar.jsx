@@ -25,15 +25,6 @@ function Navbar() {
     setName(data.name);
   };
 
-  const tokenValidation = () => {
-    let data = localStorage.getItem('user');
-    data = JSON.parse(data);
-    if (token !== data.token) {
-      history.push('/');
-    }
-    // history.push('/customer/products');
-  };
-
   useEffect(() => {
     getName();
     // tokenValidation();

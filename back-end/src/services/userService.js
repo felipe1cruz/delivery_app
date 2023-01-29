@@ -15,14 +15,17 @@ const authenticate = async (userEmail, userPassword) => {
   if (error) throw errorGenerate(400, 'Some required fields are missing');
 
   const user = await User.findOne({
-    attributes: ['name', 'email', 'role'],
+    attributes: ['id', 'name', 'email', 'role'],
     where: { email: userEmail, password: cryptoPassword },
   });
 
   if (!user) throw errorGenerate(404, 'Not found');
 
   const token = generateToken(user.dataValues);
-  return { name: user.name,
+  console.log('user', user.id);
+  return { 
+    id: user.id,
+    name: user.name,
     email: user.email,
     role: user.dataValues.role,
     token,
@@ -41,7 +44,6 @@ const createUser = async ({ name, email, password }) => {
     throw errorGenerate(409, 'User already registered');
   }
   const newUser = await User.create({ name, email, password: cryptoPassword, role: 'customer' });
-  
   const token = generateToken(newUser.dataValues);
   return token;
 };

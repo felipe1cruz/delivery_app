@@ -47,7 +47,8 @@ function CustomerCheckout() {
     requestData('/sellers').then((response) => setSellers(response));
     const productsCart = localStorage.getItem('carrinho');
     setCarrinho(JSON.parse(productsCart));
-    setUserId(1);
+    const getUserId = localStorage.getItem('userId');
+    setUserId(JSON.parse(getUserId));
   }, []);
 
   useEffect(() => {

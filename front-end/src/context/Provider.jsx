@@ -8,6 +8,7 @@ function Provider({ children }) {
   const [quantity, setQuantity] = useState([]);
   const [cardValuePrinces, setCardValuePrinces] = useState(0);
   const [pageCheckout, setPageCheckout] = useState('');
+  const [pageOrders, setPageOrders] = useState([]);
 
   const memorize = React.useMemo(() => ({
     token,
@@ -20,6 +21,8 @@ function Provider({ children }) {
     setQuantity,
     cardValuePrinces,
     setCardValuePrinces,
+    pageOrders,
+    setPageOrders,
   }), [
     token,
     setToken,
@@ -31,6 +34,8 @@ function Provider({ children }) {
     setQuantity,
     cardValuePrinces,
     setCardValuePrinces,
+    pageOrders,
+    setPageOrders,
   ]);
   return (
     <Context.Provider

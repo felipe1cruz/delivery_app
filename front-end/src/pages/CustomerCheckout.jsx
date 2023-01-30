@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { requestLogin, requestData } from '../services/requests';
+import { requestData, postSales, setToken } from '../services/requests';
 
 function CustomerCheckout() {
   const testIdTotal = 'customer_checkout__element-order-total-price';
@@ -29,9 +29,9 @@ function CustomerCheckout() {
   };
 
   const [userId, setUserId] = useState('');
-  const [sellerId, setSellerId] = useState(0);
+  const [sellerId, setSellerId] = useState([]);
   const [sellers, setSellers] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0.0);
   const [deliveryAddress, setdeliveryAddress] = useState('');
   const [deliveryNumber, setdeliveryNumber] = useState('');
   const [carrinho, setCarrinho] = useState([]);
@@ -40,7 +40,6 @@ function CustomerCheckout() {
   const checkoutProducts = async () => {
     const cart = carrinho.filter((product) => product.qtds !== 0);
     setProducts(cart);
-    console.log('funcao checkoutProducts', products);
   };
 
   useEffect(() => {
@@ -53,6 +52,7 @@ function CustomerCheckout() {
 
   useEffect(() => {
     setTotalPrice(products.reduce((acc, curr) => acc + curr.qtds * curr.value, 0));
+    setSellerId(products.map((ma) => ma.id));
   }, [products]);
 
   useEffect(() => {
@@ -61,10 +61,8 @@ function CustomerCheckout() {
 
   const handleChange = (target) => {
     const { id, value } = target;
-    console.log(value);
     if (id === 'deliveryAddress') setdeliveryAddress(value);
     if (id === 'deliveryNumber') setdeliveryNumber(value);
-    if (id === 'sellerId') setSellerId(value);
   };
 
   const formatarMoeda = (num) => {
@@ -73,23 +71,25 @@ function CustomerCheckout() {
     return `R$ ${moeda}`;
   };
 
-  const submitButton = () => {
-    const newSale = {
-      userId,
-      sellerId,
+  const submitButton = async () => {
+    const getToken = localStorage.getItem('user');
+    const getTokenParse = JSON.parse(getToken);
+    setToken(getTokenParse.token);
+    const getSeller = await requestData('/customer/checkout');
+    const newSale = products.map(() => ({
+      userId: userId.id,
+      sellerId: getSeller[0].id,
       totalPrice,
       deliveryAddress,
       deliveryNumber,
-      saleDate: '2023-01-26 - 14:15:58',
+      saleDate: new Date(),
       status: 'Pendente',
-    };
-    console.log(newSale);
-    const data = requestLogin('/customer/checkout', newSale);
-    history.push(`/customer/orders/${data.id}`);
+    }));
+    await postSales('/customer/checkout', newSale);
+    history.push(`/customer/orders/${userId.id}`);
   };
 
   const rmButton = (name) => {
-    console.log(name);
     setProducts(products.filter((product) => product.title !== name));
   };
 
@@ -167,6 +167,7 @@ function CustomerCheckout() {
       <input
         type="number"
         placeholder="número"
+        id="deliveryNumber"
         data-testid={ testIdCustomerAdressNum }
         onChange={ (e) => handleChange(e.target) }
       />

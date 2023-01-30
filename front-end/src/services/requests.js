@@ -18,6 +18,11 @@ export const requestLogin = async (endpoint, body) => {
   return data;
 };
 
+export const postSales = async (endpoint, body) => {
+  const { data } = await api.post(endpoint, body);
+  return data;
+};
+
 // export const loginTest = async (email, password) => {
 //   const result = await api.post('/login', { email, password });
 //   return result.data;

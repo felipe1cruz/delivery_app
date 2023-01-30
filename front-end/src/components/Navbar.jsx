@@ -25,6 +25,10 @@ function Navbar() {
     setName(data.name);
   };
 
+  const goCurtomerOrders = () => {
+    history.push('/customer/orders');
+  };
+
   useEffect(() => {
     getName();
     // tokenValidation();
@@ -43,6 +47,7 @@ function Navbar() {
         <button
           type="button"
           data-testid="customer_products__element-navbar-link-orders"
+          onClick={ () => goCurtomerOrders() }
         >
           MEUS PEDIDOS
         </button>

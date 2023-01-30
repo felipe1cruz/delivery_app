@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { requestData, postSales } from '../services/requests';
+import { requestData, postSales, setToken } from '../services/requests';
 
 function CustomerCheckout() {
   const testIdTotal = 'customer_checkout__element-order-total-price';
@@ -72,9 +72,13 @@ function CustomerCheckout() {
   };
 
   const submitButton = async () => {
-    const newSale = products.map((ma) => ({
+    const getToken = localStorage.getItem('user');
+    const getTokenParse = JSON.parse(getToken);
+    setToken(getTokenParse.token);
+    const getSeller = await requestData('/customer/checkout');
+    const newSale = products.map(() => ({
       userId: userId.id,
-      sellerId: ma.id,
+      sellerId: getSeller[0].id,
       totalPrice,
       deliveryAddress,
       deliveryNumber,

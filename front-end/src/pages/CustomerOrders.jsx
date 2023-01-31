@@ -15,7 +15,6 @@ function CustomerOrders() {
     setPageOrders([requestSales]);
   }, [setPageOrders]);
 
-  console.log(pageOrders);
   return (
     <div>
       <Navbar />

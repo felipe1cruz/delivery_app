@@ -21,7 +21,6 @@ const createNewSalesProducts = async (id, pId, qntty) => {
     });
 };
 
-
 module.exports = {
   createNewSales,
   createNewSalesProducts,

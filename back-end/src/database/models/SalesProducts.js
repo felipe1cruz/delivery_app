@@ -1,10 +1,11 @@
 const db = require(".");
 
 module.exports = (sequelize, DataTypes) => {
-  const SalesProducts = sequelize.define('salesProducts',
-    {
-      quantity: DataTypes.INTEGER,
-    }, 
+  const SalesProducts = sequelize.define('SalesProducts', {
+    saleId: DataTypes.INTEGER,
+    productId:  DataTypes.INTEGER,
+    quantity: DataTypes.INTEGER,
+  },
     {
       tableName: 'salesProducts',
       sequelize: db,

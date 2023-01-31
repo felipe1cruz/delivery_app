@@ -72,20 +72,22 @@ function CustomerCheckout() {
   };
 
   const submitButton = async () => {
+    const endpointCheckout = '/customer/checkout';
     const getToken = localStorage.getItem('user');
     const getTokenParse = JSON.parse(getToken);
     setToken(getTokenParse.token);
-    const getSeller = await requestData('/customer/checkout');
-    const newSale = products.map(() => ({
+    const newSale = {
       userId: userId.id,
-      sellerId: getSeller[0].id,
+      sellerId: sellerId[0],
       totalPrice,
       deliveryAddress,
       deliveryNumber,
-      saleDate: new Date(),
-      status: 'Pendente',
+    };
+    const newPro = products.map((product) => ({
+      productId: product.id,
+      quantity: product.qtds,
     }));
-    await postSales('/customer/checkout', newSale);
+    await postSales(endpointCheckout, { newSale, newPro });
     history.push(`/customer/orders/${userId.id}`);
   };
 
@@ -146,7 +148,6 @@ function CustomerCheckout() {
       <p>P. Vendedora Responsável</p>
       <select
         data-testid={ testIdSellerSelect }
-        value={ sellerId }
         onChange={ (e) => setSellerId(e.target.value) }
       >
         {sellers.map((seller, i) => (

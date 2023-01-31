@@ -14,12 +14,13 @@ const createNewSales = async (newSale) => {
   };
   
 const createNewSalesProducts = async (id, pId, qntty) => {
-  await SalesProducts.create({
+  const postSalesProducts = await SalesProducts.create({
       saleId: id,
       productId: pId,
       quantity: qntty,
     });
-};
+  return postSalesProducts;
+ };
 
 module.exports = {
   createNewSales,

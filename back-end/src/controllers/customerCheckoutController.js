@@ -3,12 +3,14 @@ const customerCheckoutService = require('../services/customerCheckoutService');
 const postSales = async (req, res, next) => {
   try {
     const { newSale, newPro } = req.body;
-    const pro = await customerCheckoutService.createNewSales(newSale);
-    await newPro.map((ma) => {
-        return customerCheckoutService.createNewSalesProducts(
-          pro.id, ma.productId, ma.quantity,
-        );
-      });
+    const returnCreateSale = await customerCheckoutService.createNewSales(newSale);
+    newPro.map(async (ma) => {
+      await customerCheckoutService.createNewSalesProducts(
+        returnCreateSale.id,
+        ma.productId,
+        ma.quantity,
+      );
+    });
     return res.status(201).json('created');
   } catch (error) {
     next(error);

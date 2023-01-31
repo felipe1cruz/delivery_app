@@ -1,56 +1,80 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { requestData } from '../services/requests';
+import dataTestsId from '../utils/dataTests/dataTestId';
+import dataTestsNoId from '../utils/dataTests/dataTestNoId';
+import Context from '../context/Context';
 
 function Products() {
-  const [products, setProducts] = useState([]);
-  const [quantity, setQuantity] = useState([]);
+  const {
+    products,
+    setProducts,
+    quantity,
+    setQuantity,
+    cardValuePrinces,
+    setCardValuePrinces,
+  } = useContext(Context);
 
-  const dataTests = (productId) => {
-    const cardPrince = `customer_products__element-card-price-${productId}`;
-    const cardTitle = `customer_products__element-card-title-${productId}`;
-    const cardBgImage = `customer_products__img-card-bg-image-${productId}`;
-    const cardRmItem = `customer_products__button-card-rm-item-${productId}`;
-    const cardQuantity = `customer_products__input-card-quantity-${productId}`;
-    const cardAddItem = `customer_products__button-card-add-item-${productId}`;
-    return {
-      cardPrince,
-      cardTitle,
-      cardBgImage,
-      cardRmItem,
-      cardQuantity,
-      cardAddItem,
-    };
-  };
+  const history = useHistory();
 
-  const addRmQuantity = ({ value }, id) => {
-    switch (value) {
-    case '+':
+  const handleQtds = (valor, productId, title, price) => {
+    if (valor >= 0) {
       setQuantity([
-        ...quantity.filter((fil) => fil.id !== id),
+        ...quantity.filter((fil) => fil.id !== productId),
         {
-          id,
-          qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
+          id: productId,
+          title,
+          qtds: Number(valor),
+          value: Number(price),
         },
       ]);
-      break;
-    case '-':
-      setQuantity([
-        ...quantity.filter((fil) => fil.id !== id),
-        {
-          id,
-          qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
-            ? 0
-            : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
-        },
-      ]);
-      break;
-    default:
-      break;
     }
   };
 
+  const redirecionar = () => history.push('/customer/checkout');
+
+  const formatarMoeda = (resulteFinal) => resulteFinal.toLocaleString(
+    'pt-br',
+    { style: 'currency', currency: 'BRL' },
+  );
+
+  const calculatevaluesCards = () => {
+    const filterValues = quantity.filter((value) => value.qtds !== 0);
+    const resulte = filterValues.map((ac) => (ac.qtds * ac.value));
+    const resulteFinal = resulte.reduce((ac, va) => ac + va, 0);
+    setCardValuePrinces(resulteFinal.toFixed(2));
+  };
+
+  const addQuantity = (id, price, title) => {
+    setQuantity([
+      ...quantity.filter((fil) => fil.id !== id),
+      {
+        id,
+        title,
+        qtds: quantity.filter((fil) => fil.id === id)[0].qtds + 1,
+        value: Number(price),
+      },
+    ]);
+  };
+
+  const rmQuantity = (id, price, title) => {
+    setQuantity([
+      ...quantity.filter((fil) => fil.id !== id),
+      {
+        id,
+        title,
+        qtds: quantity.filter((fil) => fil.id === id)[0].qtds === 0
+          ? 0
+          : quantity.filter((fil) => fil.id === id)[0].qtds - 1,
+        value: Number(price),
+      },
+    ]);
+  };
+
   useEffect(() => {
-    localStorage.setItem('carrinho', JSON.stringify(quantity));
+    localStorage.setItem('carrinho', JSON.stringify(quantity
+       || { id: 0, title: '', qtds: 0, value: 0 }));
+    calculatevaluesCards();
   }, [quantity]);
 
   useEffect(() => {
@@ -58,7 +82,12 @@ function Products() {
       .then((response) => {
         setProducts(response);
         setQuantity([
-          ...response.map((ma) => ({ id: ma.id, qtds: 0 })),
+          ...response.map((ma) => ({
+            id: ma.id,
+            title: ma.name,
+            qtds: 0,
+            value: Number(ma.price),
+          })),
         ]);
       })
       .catch();
@@ -72,50 +101,83 @@ function Products() {
           style={ {
             border: 'solid 1px #ccc',
             margin: '5px',
-            padding: '5px' } }
+            padding: '5px',
+          } }
         >
           <div
-            data-testid={ dataTests(product.id).cardPrince }
+            data-testid={ dataTestsId(product.id).cardPrince }
           >
-            {product.price}
+            { `R$ ${formatarMoeda(product.price).replace('.', ',')}` }
           </div>
           <div
-            data-testid={ dataTests(product.id).cardTitle }
+            data-testid={ dataTestsId(product.id).cardTitle }
           >
             {product.name}
           </div>
           <img
             src={ product.urlImage }
             alt={ product.urlImage }
-            data-testid={ dataTests(product.id).cardBgImage }
+            data-testid={ dataTestsId(product.id).cardBgImage }
+            width="100px"
           />
           <button
             type="button"
-            data-testid={ dataTests(product.id).cardRmItem }
+            data-testid={ dataTestsId(product.id).cardRmItem }
             value="-"
-            onClick={ (e) => addRmQuantity(e.target, product.id) }
+            onClick={ () => rmQuantity(
+              product.id,
+              product.price,
+              product.name,
+            ) }
           >
             -
           </button>
           <input
             type="text"
-            data-testid={ dataTests(product.id).cardQuantity }
+            pattern="[0-9]+$"
+            data-testid={ dataTestsId(product.id).cardQuantity }
             value={
-              quantity.filter((fil) => fil.id === product.id)[0] === undefined
-                ? 0 : quantity.filter((fil) => fil.id === product.id)[0].qtds
+              quantity.filter((fil) => fil.id === product.id).length > 0
+                && quantity.filter((fil) => fil.id === product.id)[0].qtds
             }
+            // value={ 0 }
+            onChange={ (e) => handleQtds(
+              e.target.value,
+              product.id,
+              product.name,
+              product.price,
+            ) }
           />
+          { console.log() }
           <button
             type="button"
-            data-testid={ dataTests(product.id).cardAddItem }
+            data-testid={ dataTestsId(product.id).cardAddItem }
             value="+"
-            onClick={ (e) => addRmQuantity(e.target, product.id) }
+            onClick={ () => addQuantity(
+              product.id,
+              product.price,
+              product.name,
+            ) }
           >
             +
           </button>
         </div>
       ))}
+      <button
+        type="button"
+        data-testid={ dataTestsNoId().buttonCart }
+        onClick={ () => redirecionar() }
+        disabled={ cardValuePrinces === '0.00' }
+      >
+        {'Ver Carrinho: R$ '}
+        <span
+          data-testid={ dataTestsNoId().buttonValue }
+        >
+          { cardValuePrinces.toString().replace('.', ',') }
+        </span>
+      </button>
     </div>
+
   );
 }
 

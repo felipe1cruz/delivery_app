@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken');
 const errorGenerate = require('./genericErrorHandler');
+require('dotenv/config');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'segredoJWT';
 
 const generateToken = (user) => {
   const jwtConfig = {
     expiresIn: '20d',
-    algorithm: 'HS256',  
+    algorithm: 'HS256',
   };
 
   const token = jwt.sign(user, JWT_SECRET, jwtConfig);

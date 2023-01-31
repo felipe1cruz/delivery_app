@@ -10,6 +10,37 @@ const user = async (req, res, next) => {
   }
 };
 
+const createUser = async (req, res, next) => {
+  try {
+    await userService.createUser(req.body);
+    return res.status(201).json('created');
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUserId = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const userId = await userService.getUserId(name);
+    return res.status(201).json(userId);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getSellers = async (req, res, next) => {
+  try {
+    const sellers = await userService.getSellers();
+    return res.status(201).json(sellers);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   user,
+  createUser,
+  getSellers,
+  getUserId,
 };

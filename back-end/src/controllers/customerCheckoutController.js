@@ -11,7 +11,7 @@ const postSales = async (req, res, next) => {
         ma.quantity,
       );
     });
-    return res.status(201).json('created');
+    return res.status(201).json({ rec: returnCreateSale, message: 'created' });
   } catch (error) {
     next(error);
   }

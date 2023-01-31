@@ -87,8 +87,8 @@ function CustomerCheckout() {
       productId: product.id,
       quantity: product.qtds,
     }));
-    await postSales(endpointCheckout, { newSale, newPro });
-    history.push(`/customer/orders/${userId.id}`);
+    const retorno = await postSales(endpointCheckout, { newSale, newPro });
+    history.push(`/customer/orders/${retorno.rec.id}`);
   };
 
   const rmButton = (name) => {

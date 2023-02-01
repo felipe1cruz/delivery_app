@@ -25,6 +25,10 @@ function Navbar() {
     setName(data.name);
   };
 
+  const goCurtomerproducts = () => {
+    history.push('/customer/products');
+  };
+
   const goCurtomerOrders = () => {
     history.push('/customer/orders');
   };
@@ -40,6 +44,7 @@ function Navbar() {
         <button
           type="button"
           data-testid="customer_products__element-navbar-link-products"
+          onClick={ () => goCurtomerproducts() }
         >
           PRODUTOS
         </button>

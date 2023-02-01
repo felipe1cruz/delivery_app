@@ -5,7 +5,7 @@ const sales = async (_req, res, next) => {
     const allSales = await customerOrdersService.getSales();
     return res.status(200).json(allSales);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -15,7 +15,7 @@ const salesId = async (req, res, next) => {
     const allSales = await customerOrdersService.getSalesId(id);
     return res.status(200).json(allSales);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -25,7 +25,7 @@ const salesProducts = async (req, res, next) => {
     const allSalesProducts = await customerOrdersService.getSalesProducts(id);
     return res.status(200).json(allSalesProducts);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 

@@ -22,13 +22,8 @@ const authenticate = async (userEmail, userPassword) => {
   if (!user) throw errorGenerate(404, 'Not found');
 
   const token = generateToken(user.dataValues);
-  return { 
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.dataValues.role,
-    token,
-   };
+  const { id, name, email, role } = user.dataValues;
+  return { id, name, email, role, token };
 };
 
 const createUser = async ({ name, email, password }) => {

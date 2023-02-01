@@ -14,6 +14,13 @@ function Orders() {
     history.push(`/customer/orders/${id}`);
   };
 
+  const formarData = (ma) => {
+    const dia = ma.saleDate.split('-')[2].split('T')[0];
+    const mes = ma.saleDate.split('-')[1];
+    const ano = ma.saleDate.split('-')[0];
+    return `${dia}/${mes}/${ano}`;
+  };
+
   return (
     pageOrders.map((ma) => (
       <div key={ ma.id }>
@@ -33,14 +40,14 @@ function Orders() {
           </div>
           <div>
             <div
-              data-testid={ dataTestsId(ma.id).orderDate }
+              data-testid={ dataTestsId(ma.id).elementOrderDate }
             >
-              { ma.saleDate }
+              { formarData(ma) }
             </div>
             <div
-              data-testid={ dataTestsId(ma.id).cardPrince }
+              data-testid={ dataTestsId(ma.id).orderPrice }
             >
-              { ma.totalPrice }
+              { ma.totalPrice.replace('.', ',') }
             </div>
           </div>
         </button>

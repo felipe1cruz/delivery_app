@@ -9,8 +9,14 @@ const dataTestsId = (productId) => {
   const cardAddItem = `${prefixoCP}button-card-add-item-${productId}`;
 
   const orderDate = `${prefixoCP}element-order-date-${productId}`;
-  const orderId = `${prefixoCP}element-order-id-${productId}`;
-  const orderStatus = `${prefixoCP}element-delivery-status-${productId}`;
+
+  const prefix = 'customer_orders__';
+
+  const orderId = `${prefix}element-order-id-${productId}`;
+  const orderStatus = `${prefix}element-delivery-status-${productId}`;
+  const elementOrderDate = `${prefix}element-order-date-${productId}`;
+  const orderPrice = `${prefix}element-card-price-${productId}`;
+
   return {
     cardPrince,
     cardTitle,
@@ -21,6 +27,8 @@ const dataTestsId = (productId) => {
     orderDate,
     orderId,
     orderStatus,
+    orderPrice,
+    elementOrderDate,
   };
 };
 

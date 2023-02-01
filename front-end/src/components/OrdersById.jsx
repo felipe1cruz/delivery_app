@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Context from '../context/Context';
 import { requestData } from '../services/requests';
+import dataTestsId from '../utils/dataTests/dataTestId';
 import OrdersList from './OrdersList';
 
 function OrdersById() {
@@ -40,22 +41,34 @@ function OrdersById() {
 
   return (
     <div key={ pageOrdersIds.id }>
-      <div>
+      <div
+        data-testid={ dataTestsId(pageOrdersIds.id).orderId }
+      >
         <div>
           Detalhe do Pedido
         </div>
         <div>
           PEDIDO:
           { ' ' }
-          { pageOrdersIds.id }
+          <span
+            data-testid={ dataTestsId(pageOrdersIds.id).orderId }
+          >
+            { pageOrdersIds.id }
+          </span>
         </div>
-        <div>
+        <div
+          data-testid={ dataTestsId(pageOrdersIds.id).orderSeller }
+        >
           { pageOrdersIds.seller }
         </div>
-        <div>
+        <div
+          data-testid={ dataTestsId(pageOrdersIds.id).orderDate }
+        >
           { pageOrdersIds.saleDate }
         </div>
-        <div>
+        <div
+          data-testid={ dataTestsId(pageOrdersIds.id).orderStatus }
+        >
           { pageOrdersIds.status }
         </div>
         <button

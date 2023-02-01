@@ -22,7 +22,6 @@ const authenticate = async (userEmail, userPassword) => {
   if (!user) throw errorGenerate(404, 'Not found');
 
   const token = generateToken(user.dataValues);
-  console.log('user', user.id);
   return { 
     id: user.id,
     name: user.name,

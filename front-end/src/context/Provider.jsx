@@ -9,6 +9,8 @@ function Provider({ children }) {
   const [cardValuePrinces, setCardValuePrinces] = useState(0);
   const [pageCheckout, setPageCheckout] = useState('');
   const [pageOrders, setPageOrders] = useState([]);
+  const [pageOrdersIds, setPageOrdersIds] = useState([]);
+  const [ordersList, setOrdersList] = useState([]);
 
   const memorize = React.useMemo(() => ({
     token,
@@ -23,6 +25,10 @@ function Provider({ children }) {
     setCardValuePrinces,
     pageOrders,
     setPageOrders,
+    pageOrdersIds,
+    setPageOrdersIds,
+    ordersList,
+    setOrdersList,
   }), [
     token,
     setToken,
@@ -36,6 +42,10 @@ function Provider({ children }) {
     setCardValuePrinces,
     pageOrders,
     setPageOrders,
+    pageOrdersIds,
+    setPageOrdersIds,
+    ordersList,
+    setOrdersList,
   ]);
   return (
     <Context.Provider

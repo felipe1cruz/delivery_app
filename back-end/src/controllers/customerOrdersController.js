@@ -1,16 +1,36 @@
 const customerOrdersService = require('../services/customerOrdersService');
 
-const sales = async (_req, res) => {
-  const allSales = await customerOrdersService.getSales();
-  return res.status(200).json(allSales);
+const sales = async (_req, res, next) => {
+  try {
+    const allSales = await customerOrdersService.getSales();
+    return res.status(200).json(allSales);
+  } catch (error) {
+    next(error)
+  }
 };
 
-// const salesId = async (req, res) => {
-//   const { id } = req.params;
-//   const allSales = await customerOrdersService.getSalesId(id);
-//   return res.status(200).json(allSales);
-// };
+const salesId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const allSales = await customerOrdersService.getSalesId(id);
+    return res.status(200).json(allSales);
+  } catch (error) {
+    next(error)
+  }
+};
+
+const salesProducts = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const allSalesProducts = await customerOrdersService.getSalesProducts(id);
+    return res.status(200).json(allSalesProducts);
+  } catch (error) {
+    next(error)
+  }
+};
 
 module.exports = {
   sales,
+  salesId,
+  salesProducts,
 };

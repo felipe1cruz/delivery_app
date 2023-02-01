@@ -9,6 +9,8 @@ const dataTestsId = (productId) => {
   const cardAddItem = `${prefixoCP}button-card-add-item-${productId}`;
 
   const orderDate = `${prefixoCP}element-order-date-${productId}`;
+  const orderId = `${prefixoCP}element-order-id-${productId}`;
+  const orderStatus = `${prefixoCP}element-delivery-status-${productId}`;
   return {
     cardPrince,
     cardTitle,
@@ -17,6 +19,8 @@ const dataTestsId = (productId) => {
     cardQuantity,
     cardAddItem,
     orderDate,
+    orderId,
+    orderStatus,
   };
 };
 

@@ -1,17 +1,15 @@
 import React from 'react';
-import { render, screen, waitFor,
-  waitForElementToBeRemoved } from '@testing-library/react';
+import { screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 
 import App from '../../App';
-import renderWithRouter from '../helpers/renderWithRouter';
+import renderWRP from '../helpers/renderWithRouterAndProvider';
 import { validUser, invalidUser, customerUser,
   sellerUser, adminUser } from '../mocks/userMocks';
 
 describe('#### Avalia a Tela de Login ####', () => {
   it('1 - Os elementos básicos estão sendo exibidos?', () => {
-    render(<MemoryRouter><App /></MemoryRouter>);
+    renderWRP(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
@@ -28,7 +26,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('2 - Clicar no botão de cadastro leva para a página de cadastro?', async () => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWRP(<App />);
     const novaConta = screen.getByRole('button', { name: /ainda não tenho conta/i });
 
     expect(history.location.pathname).toBe('/login');
@@ -38,7 +36,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('3 - A rota "/" é redirecionada para "/login"?', async () => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWRP(<App />);
     const novaConta = screen.getByRole('button', { name: /ainda não tenho conta/i });
 
     userEvent.click(novaConta);
@@ -52,7 +50,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('4 - Botão login é liberado com dados válidos?', () => {
-    render(<MemoryRouter><App /></MemoryRouter>);
+    renderWRP(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
@@ -65,7 +63,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('5 - Email inválido bloqueia login?', () => {
-    render(<MemoryRouter><App /></MemoryRouter>);
+    renderWRP(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
@@ -78,7 +76,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('6 - Senha inválida bloqueia login?', () => {
-    render(<MemoryRouter><App /></MemoryRouter>);
+    renderWRP(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
@@ -91,7 +89,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('7 - Login falha com dados válidos não cadastrados?', async () => {
-    render(<MemoryRouter><App /></MemoryRouter>);
+    renderWRP(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
@@ -107,7 +105,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('8 - Customer pode logar com sucesso?', async () => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWRP(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
@@ -122,7 +120,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('9 - Seller pode logar com sucesso?', async () => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWRP(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);
@@ -137,7 +135,7 @@ describe('#### Avalia a Tela de Login ####', () => {
   });
 
   it('10 - Admin pode logar com sucesso?', async () => {
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWRP(<App />);
 
     const email = screen.getByRole('textbox', { name: /login/i });
     const senha = screen.getByLabelText(/senha/i);

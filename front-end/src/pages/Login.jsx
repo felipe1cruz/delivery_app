@@ -57,7 +57,7 @@ function Login() {
   return (
     <div>
       <form>
-        <label htmlFor="email">
+        <label htmlFor="login">
           Login
           <input
             data-testid={ testIdInputEmail }

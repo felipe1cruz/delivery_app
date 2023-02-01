@@ -13,6 +13,7 @@ const invalidUser = {
 };
 
 const customerUser = {
+  id: 3,
   name: 'Cliente Zé Birita',
   senha: '$#zebirita#$',
   email: 'zebirita@email.com',
@@ -21,6 +22,7 @@ const customerUser = {
 };
 
 const adminUser = {
+  id: 1,
   name: 'Delivery App Admin',
   senha: '--adm2@21!!--',
   email: 'adm@deliveryapp.com',
@@ -29,6 +31,7 @@ const adminUser = {
 };
 
 const sellerUser = {
+  id: 2,
   name: 'Fulana Pereira',
   senha: 'fulana@123',
   email: 'fulana@deliveryapp.com',
@@ -37,7 +40,7 @@ const sellerUser = {
 };
 
 const findOneUser = (user) => {
- return { dataValues: { name: user.name, email: user.email, role: user.role } };
+ return { dataValues: { id: user.id, name: user.name, email: user.email, role: user.role } };
 };
 
 const loginRes = (user) => {

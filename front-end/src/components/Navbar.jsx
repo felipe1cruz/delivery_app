@@ -14,6 +14,7 @@ function Navbar() {
 
   const logout = () => {
     localStorage.clear('user');
+    // localStorage.clear('carrinho');
     setToken('');
     history.push('/');
     // setPageCheckout(false);

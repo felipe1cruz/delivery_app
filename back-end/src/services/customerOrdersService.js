@@ -19,12 +19,20 @@ const getSalesProducts = async (id) => {
     where: {
       saleId: id,
     },
+  }); 
+   return allSalesProducts;
+};
+
+const salesProductsId = async (id) => {
+  const findSaleProduct = await SalesProducts.findAll({
+    where: { saleId: id },
   });
-  return allSalesProducts;
+  return findSaleProduct;
 };
 
 module.exports = {
   getSales,
   getSalesId,
   getSalesProducts,
+  salesProductsId,
 };

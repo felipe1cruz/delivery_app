@@ -9,4 +9,6 @@ router.get('/customer/orders/:id', customerOrdersController.salesId);
 
 router.get('/salesProducts/:id', customerOrdersController.salesProducts);
 
+router.get('/seller/orders/:id', customerOrdersController.salesProductsId);
+
 module.exports = router;

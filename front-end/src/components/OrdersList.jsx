@@ -27,7 +27,7 @@ function OrdersList() {
   };
 
   useEffect(() => {
-    if (ordersList.lengh !== 0) {
+    if (ordersList.length !== 0) {
       totalPriceCount();
     }
   }, [ordersList]);
@@ -51,6 +51,7 @@ function OrdersList() {
   const tableRow = () => (
     ordersList.map((ma, index) => (
       <tr key={ index } style={ { margin: '10px' } }>
+        { console.log(index) }
         <td data-testid={ `${testIdItemNumber}${index}` }>{ index + 1 }</td>
         <td data-testid={ `${testIdTableName}${index}` }>{ ma.name }</td>
         <td data-testid={ `${testIdTableQnt}${index}` }>{ ma.qtds }</td>

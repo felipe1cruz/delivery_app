@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Context from '../context/Context';
 import { requestData } from '../services/requests';
-import dataTestsId from '../utils/dataTests/dataTestId';
+// import dataTestsId from '../utils/dataTests/dataTestId';
 import OrdersList from './OrdersList';
 
 function OrdersById() {
@@ -41,38 +41,33 @@ function OrdersById() {
 
   return (
     <div key={ pageOrdersIds.id }>
-      <div
-        data-testid={ dataTestsId(pageOrdersIds.id).orderId }
-      >
-        <div>
-          Detalhe do Pedido
-        </div>
-        <div>
+      <div>
+        Detalhe do Pedido
+        <br />
+        <div data-testid="customer_order_details__element-order-details-label-order-id">
           PEDIDO:
           { ' ' }
-          <span
-            data-testid={ dataTestsId(pageOrdersIds.id).orderId }
-          >
-            { pageOrdersIds.id }
-          </span>
+          { pageOrdersIds.id }
         </div>
         <div
-          data-testid={ dataTestsId(pageOrdersIds.id).orderSeller }
+          data-testid="customer_order_details__element-order-details-label-seller-name"
         >
           { pageOrdersIds.seller }
         </div>
         <div
-          data-testid={ dataTestsId(pageOrdersIds.id).orderDate }
+          data-testid="customer_order_details__element-order-details-label-order-date"
         >
           { pageOrdersIds.saleDate }
         </div>
         <div
-          data-testid={ dataTestsId(pageOrdersIds.id).orderStatus }
+          data-testid={ `customer_order_details__element-order-
+          details-label-delivery-status${pageOrdersIds.id}` }
         >
           { pageOrdersIds.status }
         </div>
         <button
           type="submit"
+          data-testid="customer_order_details__button-delivery-check"
           // onClick={ () => submitButtonId(ma.id) }
         >
           MARCAR COMO ENTREGUE

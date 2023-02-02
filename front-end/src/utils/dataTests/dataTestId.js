@@ -17,6 +17,15 @@ const dataTestsId = (productId) => {
   const elementOrderDate = `${prefix}element-order-date-${productId}`;
   const orderPrice = `${prefix}element-card-price-${productId}`;
 
+  const prefixAdmin = 'admin_manage__';
+
+  const itemList = `${prefixAdmin}element-user-table-item-number-${productId}`;
+  const nomeList = `${prefixAdmin}input-email-${productId}`;
+  const emailList = `${prefixAdmin}element-user-table-email`;
+  const tipoList = `${prefixAdmin}element-user-table-role-${productId}`;
+  const excluirList = `${prefixAdmin}element-user-table-remove-${productId}`;
+
+  const buttonRegister = `${prefixAdmin}button-register`;
   return {
     cardPrince,
     cardTitle,
@@ -29,6 +38,12 @@ const dataTestsId = (productId) => {
     orderStatus,
     orderPrice,
     elementOrderDate,
+    itemList,
+    nomeList,
+    emailList,
+    tipoList,
+    excluirList,
+    buttonRegister,
   };
 };
 

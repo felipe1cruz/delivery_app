@@ -19,6 +19,18 @@ const createUser = async (req, res, next) => {
   }
 };
 
+const createUserPanelAdmin = async (req, res, next) => {
+  try {
+    const date = await userService.createUserPanelAdmin(req.body);
+    if (!date) {
+      return res.status(409).json('Conflict');
+    }
+    return res.status(201).json('created'); 
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getUserId = async (req, res, next) => {
   try {
     const { name } = req.body;
@@ -38,9 +50,20 @@ const getSellers = async (req, res, next) => {
   }
 };
 
+const getUsers = async (_req, res, next) => {
+  try {
+    const users = await userService.getUsers();
+    return res.status(201).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   user,
   createUser,
   getSellers,
   getUserId,
+  getUsers,
+  createUserPanelAdmin,
 };

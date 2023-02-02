@@ -9,6 +9,8 @@ router.post('/login', userController.user);
 
 router.post('/create', userController.createUser);
 
+router.post('/createPanelAdmin', userController.createUserPanelAdmin);
+
 router.get('/sellers', userController.getSellers);
 
 router.get('/userid', userController.getUserId);

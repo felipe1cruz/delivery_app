@@ -40,7 +40,7 @@ const createUser = async ({ name, email, password }) => {
     throw errorGenerate(409, 'User already registered');
   }
   const newUser = await User.create({ name, email, password: cryptoPassword, role: 'customer' });
-  const { id, name, email, role } = newUser.dataValues;
+  const { id, role } = newUser.dataValues;
   const token = generateToken({ id, name, email, role });
   return token;
 };

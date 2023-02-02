@@ -14,17 +14,36 @@ const getSalesId = async (id) => {
   return allSales;
 };
 
+const updateSalesId = async (id, status) => {
+  console.log('update service id', id);
+  console.log('update service status', status);
+  const saleUpdate = await Sales.update(
+    { status },
+    { where: { id } },
+  );
+  return saleUpdate;
+};
+
 const getSalesProducts = async (id) => {
   const allSalesProducts = await SalesProducts.findAll({
     where: {
       saleId: id,
     },
+  }); 
+   return allSalesProducts;
+};
+
+const salesProductsId = async (id) => {
+  const findSaleProduct = await SalesProducts.findAll({
+    where: { saleId: id },
   });
-  return allSalesProducts;
+  return findSaleProduct;
 };
 
 module.exports = {
   getSales,
   getSalesId,
   getSalesProducts,
+  salesProductsId,
+  updateSalesId,
 };

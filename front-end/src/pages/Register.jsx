@@ -52,7 +52,7 @@ function Register() {
       return (validEmail && validName && validPassword);
     };
     setDisableBtn(fieldsValidation());
-    setInvalidMessage(true);
+    setInvalidMessage(false);
   }, [name, email, password]);
 
   return (

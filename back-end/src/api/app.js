@@ -5,6 +5,7 @@ const customerProducts = require('../routes/customerProductsRouter');
 const customerOrders = require('../routes/customerOrdersRouter');
 const customerCheckout = require('../routes/customerCheckoutRouter');
 const sellersRouter = require('../routes/sellersRouter');
+const usersRouter = require('../routes/usersRouter');
 const errorMiddleware = require('../middlewares/errorMiddleware');
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(customerProducts);
 app.use(customerOrders);
 app.use(customerCheckout);
 app.use(sellersRouter);
+app.use(usersRouter);
 app.get('/coffee', (_req, res) => res.status(418).end());
 app.use(express.static('public'));
 

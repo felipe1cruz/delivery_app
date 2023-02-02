@@ -44,6 +44,22 @@ const createUser = async ({ name, email, password }) => {
   return token;
 };
 
+const createUserPanelAdmin = async ({ name, email, password, role }) => {
+  const cryptoPassword = md5(password);
+  const checkCreatedUsers = await User.findOne({
+    where: {
+      email,
+    },
+  });
+
+  if (checkCreatedUsers) {
+    throw errorGenerate(409, 'User already registered');
+  }
+  const newUser = await User.create({ name, email, password: cryptoPassword, role });
+  const token = generateToken(newUser.dataValues);
+  return token;
+};
+
 const getSellers = async () => {
   const sellers = await User.findAll({
     attributes: ['id', 'name'],
@@ -54,8 +70,17 @@ const getSellers = async () => {
   return sellers;
 };
 
+const getUsers = async () => {
+  const users = await User.findAll({
+    attributes: ['name', 'email', 'role'],
+  });
+  return users;
+};
+
 module.exports = {
   authenticate,
   createUser,
   getSellers,
+  getUsers,
+  createUserPanelAdmin,
 };

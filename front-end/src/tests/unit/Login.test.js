@@ -8,6 +8,10 @@ import { validUser, invalidUser, customerUser,
   sellerUser, adminUser } from '../mocks/userMocks';
 
 describe('#### Avalia a Tela de Login ####', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('1 - Os elementos básicos estão sendo exibidos?', () => {
     renderWRP(<App />);
 

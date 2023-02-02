@@ -6,7 +6,7 @@ const testIdTableName = 'customer_order_details__element-order-table-name-';
 const testIdTableQnt = 'customer_order_details__element-order-table-quantity-';
 const testIdTableUnitPrice = 'ustomer_order_details__element-order-table-unit-price-';
 const testIdTableSubTotal = 'customer_order_details__element-order-table-sub-total-';
-const testIdTotalPrice = 'customer_order_details__element-order-total-price';
+const testIdTotal = 'customer_order_details__element-order-total-price';
 
 function OrdersList() {
   const { ordersList } = useContext(Context);
@@ -78,7 +78,7 @@ function OrdersList() {
           { tableRow() }
         </tbody>
       </table>
-      <div data-testid={ testIdTotalPrice }>
+      <div data-testid={ testIdTotal }>
         <br />
         { `Total: ${currencyBrl(totalPrice)}` }
       </div>

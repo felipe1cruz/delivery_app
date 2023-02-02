@@ -9,7 +9,7 @@ function SellerOrdersDetails() {
   const [products, setProducts] = useState([]);
   const [list, setList] = useState([]);
   const [orderId, setOrderId] = useState([]);
-  const [total, setTotal] = useState('');
+  const [total, setTotal] = useState(0);
   //   const history = useHistory();
 
   const dataTestsId = (index) => {
@@ -40,12 +40,11 @@ function SellerOrdersDetails() {
   }, []);
 
   useEffect(() => {
-    const sumTotal = list.reduce((curr, acc) => curr.subtotal + acc.subtotal) || 2;
-    setTotal(sumTotal || 2);
   }, [list]);
 
   useEffect(() => {
     let lista = [];
+    let soma = 0;
     productsOrder.map((productOrder) => {
       products.map((product) => {
         if (productOrder.productId === product.id) {
@@ -54,13 +53,16 @@ function SellerOrdersDetails() {
             quantity: productOrder.quantity,
             price: Number(product.price),
             subtotal: productOrder.quantity * product.price }];
+          soma = (productOrder.quantity * product.price) + soma;
         }
         return null;
       });
       return null;
     });
     setList(lista);
-  }, [productsOrder, products]);
+    setTotal(soma);
+  }, [productsOrder, products, total]);
+
   const formatarMoeda = (num) => {
     let moeda = String(num);
     moeda = moeda.replace('.', ',');
@@ -143,7 +145,7 @@ function SellerOrdersDetails() {
       <div
         data-testid="seller_order_details__element-order-total-price"
       >
-        {`TOTAL ${total.toFixed(2)}`}
+        {`TOTAL ${formatarMoeda(total.toFixed(2))}`}
       </div>
     </div>
   );

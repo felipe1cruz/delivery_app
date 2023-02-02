@@ -1,7 +1,13 @@
+import stringGenerator from '../helpers/stringGenerator';
+
+const minValidLengthOfUserName = 12;
+const minValidLengthOfPassword = 6;
+const randomEmailLength = 8;
+
 const validUser = {
-  nome: 'Joselito Hermes',
-  senha: 'Sem Noção',
-  email: 'candidato@semnocao.com',
+  nome: stringGenerator(minValidLengthOfUserName),
+  senha: stringGenerator(minValidLengthOfPassword),
+  email: `${stringGenerator(randomEmailLength)}@email.com`,
 };
 
 const invalidUser = {

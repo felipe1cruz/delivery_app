@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { requestData } from '../services/requests';
+import { requestData, updateSales } from '../services/requests';
 
 function SellerOrdersDetails() {
   const { id } = useParams();
@@ -10,6 +10,11 @@ function SellerOrdersDetails() {
   const [list, setList] = useState([]);
   const [orderId, setOrderId] = useState([]);
   const [total, setTotal] = useState(0);
+  const [preparando, setPreparando] = useState(false);
+  const [transito, setTransito] = useState(false);
+  const [status, setStatus] = useState('');
+  const [data, setData] = useState('');
+  const emTransito = 'Em Trânsito';
   //   const history = useHistory();
 
   const dataTestsId = (index) => {
@@ -28,10 +33,26 @@ function SellerOrdersDetails() {
     };
   };
 
+  const statusPedido = async (newStatus) => {
+    if (newStatus === 'Preparando' || newStatus === emTransito) setPreparando(true);
+    if (newStatus === transito) setTransito(true);
+    await updateSales(`/salesProducts/${id}`, { status: newStatus });
+    setStatus(newStatus);
+  };
+
+  const formarData = (ma) => {
+    if (ma) {
+      const dia = ma.split('-')[2].split('T')[0];
+      const mes = ma.split('-')[1];
+      const ano = ma.split('-')[0];
+      console.log(`${dia}/${mes}/${ano}`);
+      return `${dia}/${mes}/${ano}`;
+    }
+  };
+
   useEffect(() => {
     requestData(`/customer/orders/${id}`)
       .then((response) => setOrderId(response));
-
     requestData(`/seller/orders/${id}`)
       .then((response) => setProductsOrder(response));
 
@@ -40,7 +61,16 @@ function SellerOrdersDetails() {
   }, []);
 
   useEffect(() => {
-  }, [list]);
+    setStatus(orderId.status);
+    setData(orderId.saleDate);
+  }, [orderId]);
+
+  useEffect(() => {
+  }, [status, setStatus]);
+
+  useEffect(() => {
+    console.log('data', data);
+  }, [data, setData, formarData]);
 
   useEffect(() => {
     let lista = [];
@@ -61,6 +91,11 @@ function SellerOrdersDetails() {
     });
     setList(lista);
     setTotal(soma);
+
+    if (orderId.status === 'Preparando'
+    || orderId.status === emTransito) setPreparando(true);
+    if (orderId.status === emTransito
+    || orderId.status === 'Pendente') setTransito(true);
   }, [productsOrder, products, total]);
 
   const formatarMoeda = (num) => {
@@ -86,22 +121,26 @@ function SellerOrdersDetails() {
       <span
         data-testId="seller_order_details__element-order-details-label-order-date"
       >
-        { orderId.saleDate }
+        { formarData(orderId.saleDate) }
       </span>
       <span
         data-testId="seller_order_details__element-order-details-label-delivery-status"
       >
-        { orderId.status }
+        { status }
       </span>
       <button
         type="button"
         data-testId="seller_order_details__button-preparing-check"
+        disabled={ preparando }
+        onClick={ () => statusPedido('Preparando') }
       >
         Preparar Pedido
       </button>
       <button
         type="button"
         data-testId="seller_order_details__button-dispatch-check"
+        disabled={ transito }
+        onClick={ () => statusPedido('Em Trânsito') }
       >
         Saiu Para Entrega
       </button>

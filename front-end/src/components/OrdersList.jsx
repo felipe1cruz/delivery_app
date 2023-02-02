@@ -4,7 +4,7 @@ import Context from '../context/Context';
 const testIdItemNumber = 'customer_order_details__element-order-table-item-number-';
 const testIdTableName = 'customer_order_details__element-order-table-name-';
 const testIdTableQnt = 'customer_order_details__element-order-table-quantity-';
-const testIdTableUnitPrice = 'customer_order_details__element-order-table-unit-price-';
+const testIdTableUnitPrice = 'ustomer_order_details__element-order-table-unit-price-';
 const testIdTableSubTotal = 'customer_order_details__element-order-table-sub-total-';
 const testIdTotalPrice = 'customer_order_details__element-order-total-price';
 

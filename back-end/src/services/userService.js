@@ -45,7 +45,8 @@ const createUser = async ({ name, email, password }) => {
   return token;
 };
 
-const createUserPanelAdmin = async ({ name, email, password, role }) => {
+const createUserPanelAdmin = async (body) => {
+  const { name, email, password, role } = body;
   const cryptoPassword = md5(password);
   const checkCreatedUsers = await User.findOne({
     where: {

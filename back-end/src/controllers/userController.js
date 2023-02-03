@@ -20,6 +20,9 @@ const createUser = async (req, res, next) => {
 };
 
 const createUserPanelAdmin = async (req, res, next) => {
+  console.log('Controller', req.body);
+  // const token = req.headers.authorization;
+  // const jwtVery = jwt.verify(token, 'segredoJWT')
   try {
     const date = await userService.createUserPanelAdmin(req.body);
     if (!date) {

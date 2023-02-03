@@ -11,7 +11,7 @@ function getElementsOfInterest() {
   const email = screen.getByRole('textbox', { name: /email/i });
   const senha = screen.getByLabelText(/senha/i);
   const botaoCadastro = screen.getByRole('button', { name: /cadastrar/i });
-  const msgJaCadastrado = screen.getByText(/usuário já cadastrado!/i, { hidden: true });
+  const msgJaCadastrado = screen.getByText(/dados inválidos ou usuário já cadastrado!/i, { hidden: true });
   return { nome, email, senha, botaoCadastro, msgJaCadastrado };
 }
 
@@ -37,7 +37,7 @@ describe('Avalia a Tela de Register', () => {
     const { nome, email, senha, botaoCadastro } = getElementsOfInterest();
     expect(botaoCadastro).toBeDisabled();
 
-    userEvent.type(nome, validUser.nome);
+    userEvent.type(nome, validUser.name);
     userEvent.type(senha, validUser.senha);
     userEvent.type(email, validUser.email);
     expect(botaoCadastro).toBeEnabled();
@@ -47,7 +47,7 @@ describe('Avalia a Tela de Register', () => {
     const { nome, email, senha, botaoCadastro } = getElementsOfInterest();
     expect(botaoCadastro).toBeDisabled();
 
-    userEvent.type(nome, invalidUser.nome);
+    userEvent.type(nome, invalidUser.name);
     userEvent.type(senha, validUser.senha);
     userEvent.type(email, validUser.email);
     expect(botaoCadastro).toBeDisabled();
@@ -57,7 +57,7 @@ describe('Avalia a Tela de Register', () => {
     const { nome, email, senha, botaoCadastro } = getElementsOfInterest();
     expect(botaoCadastro).toBeDisabled();
 
-    userEvent.type(nome, validUser.nome);
+    userEvent.type(nome, validUser.name);
     userEvent.type(senha, invalidUser.senha);
     userEvent.type(email, validUser.email);
     expect(botaoCadastro).toBeDisabled();
@@ -67,7 +67,7 @@ describe('Avalia a Tela de Register', () => {
     const { nome, email, senha, botaoCadastro } = getElementsOfInterest();
     expect(botaoCadastro).toBeDisabled();
 
-    userEvent.type(nome, validUser.nome);
+    userEvent.type(nome, validUser.name);
     userEvent.type(senha, validUser.senha);
     userEvent.type(email, invalidUser.email);
     expect(botaoCadastro).toBeDisabled();
@@ -76,7 +76,7 @@ describe('Avalia a Tela de Register', () => {
   it('6 - Conclui cadastro com dados válidos?', async () => {
     const { nome, email, senha, botaoCadastro } = getElementsOfInterest();
 
-    userEvent.type(nome, validUser.nome);
+    userEvent.type(nome, validUser.name);
     userEvent.type(senha, validUser.senha);
     userEvent.type(email, validUser.email);
     expect(botaoCadastro).toBeEnabled();
@@ -88,7 +88,7 @@ describe('Avalia a Tela de Register', () => {
     const { nome, email, senha,
       botaoCadastro, msgJaCadastrado } = getElementsOfInterest();
 
-    userEvent.type(nome, validUser.nome);
+    userEvent.type(nome, validUser.name);
     userEvent.type(senha, validUser.senha);
     userEvent.type(email, validUser.email);
     expect(botaoCadastro).toBeEnabled();

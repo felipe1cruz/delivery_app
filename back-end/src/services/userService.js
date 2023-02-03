@@ -81,7 +81,7 @@ const getUsers = async () => {
 const getUserId = async (name) => {
   const users = await User.findOne({
     attributes: ['name', 'email', 'role'],
-    where: { name }
+    where: { name },
   });
   return users;
 };
@@ -92,5 +92,5 @@ module.exports = {
   getSellers,
   getUsers,
   createUserPanelAdmin,
-  getUserId
+  getUserId,
 };

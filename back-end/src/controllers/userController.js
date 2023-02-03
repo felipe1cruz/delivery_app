@@ -1,5 +1,5 @@
 const userService = require('../services/userService');
-const { authenticateToken, tokenDescrypt } = require('../utils/JWT');
+const { tokenDescrypt } = require('../utils/JWT');
 
 const user = async (req, res, next) => {
   try {
@@ -21,17 +21,16 @@ const createUser = async (req, res, next) => {
 };
 
 const createUserPanelAdmin = async (req, res, next) => {
-  const { userNew, tokemLocal } = req.body;
+  const { userNew } = req.body;
   const { authorization } = req.headers;
   const tokenToAdmin = tokenDescrypt(authorization);
   try {
     if (tokenToAdmin.role !== 'administrator') {
       return res.status(409).json('Conflict');
-    } else {
-      const data = await userService.createUserPanelAdmin(userNew);
-      console.log(data);
-      return res.status(201).json('created');
-    }
+    } 
+    const data = await userService.createUserPanelAdmin(userNew);
+    console.log(data);
+    return res.status(201).json('created');
   } catch (error) {
     next(error);
   }

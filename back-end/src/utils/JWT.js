@@ -15,9 +15,7 @@ const generateToken = (user) => {
   return token;
 };
 
-const tokenDescrypt = (token) => {
-  return jwt.decode(token);
-};
+const tokenDescrypt = (token) => jwt.decode(token);
 
 const authenticateToken = async (token, _next) => {
   if (!token) {

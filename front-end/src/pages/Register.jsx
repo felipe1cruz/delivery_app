@@ -8,7 +8,7 @@ const testIdInputEmail = 'common_register__input-email';
 const testIdInputPassword = 'common_register__input-password';
 const testIdBtnRegister = 'common_register__button-register';
 const testIdInvalidMessage = 'common_register__element-invalid_register';
-const errorMessage = 'Usuário já cadastrado!';
+const errorMessage = 'Dados inválidos ou usuário já cadastrado!';
 
 function Register() {
   const [name, setName] = useState('');

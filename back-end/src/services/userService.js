@@ -45,8 +45,7 @@ const createUser = async ({ name, email, password }) => {
 };
 
 const createUserPanelAdmin = async (body) => {
-  const { name, email, password, role } = body
-  console.log('Services', body);
+  const { name, email, password, role } = body;
   const cryptoPassword = md5(password);
   const checkCreatedUsers = await User.findOne({
     where: {
@@ -57,7 +56,7 @@ const createUserPanelAdmin = async (body) => {
   if (checkCreatedUsers) {
     throw errorGenerate(409, 'User already registered');
   }
-  const newUser = await User.create({ name, email , password: cryptoPassword, role });
+  const newUser = await User.create({ name, email, password: cryptoPassword, role });
   const token = generateToken(newUser.dataValues);
   return token;
 };

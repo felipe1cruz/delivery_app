@@ -116,7 +116,7 @@ function Products() {
           </div>
           <img
             src={ product.urlImage }
-            alt={ product.urlImage }
+            alt={ product.name }
             data-testid={ dataTestsId(product.id).cardBgImage }
             width="100px"
           />
@@ -148,7 +148,6 @@ function Products() {
               product.price,
             ) }
           />
-          { console.log() }
           <button
             type="button"
             data-testid={ dataTestsId(product.id).cardAddItem }

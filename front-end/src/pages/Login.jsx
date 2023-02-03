@@ -24,7 +24,6 @@ function Login() {
 
   const checkLogin = () => {
     const localget = JSON.parse(localStorage.getItem('user')) || [];
-    if (!localget) history.push('/login');
     if (localget.role === 'customer') history.push('/customer/products');
     if (localget.role === 'seller') history.push('/seller/orders');
     // if (localgetParse.role === 'customer') history.push('/administrator/');

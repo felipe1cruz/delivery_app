@@ -8,6 +8,10 @@ import { validUser, invalidUser, customerUser,
   sellerUser, adminUser } from '../mocks/userMocks';
 
 describe('#### Avalia a Tela de Login ####', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('1 - Os elementos básicos estão sendo exibidos?', () => {
     renderWRP(<App />);
 
@@ -147,5 +151,17 @@ describe('#### Avalia a Tela de Login ####', () => {
     userEvent.click(botaoLogin);
     await waitForElementToBeRemoved(botaoLogin);
     expect(history.location.pathname).toBe('/admin/manage');
+  });
+
+  it('11 - Redireciona customer logado previamente?', async () => {
+    localStorage.setItem('user', JSON.stringify({ role: 'customer' }));
+    const { history } = renderWRP(<App />);
+    expect(history.location.pathname).toBe('/customer/products');
+  });
+
+  it('12 - Redireciona seller logado previamente?', async () => {
+    localStorage.setItem('user', JSON.stringify({ role: 'seller' }));
+    const { history } = renderWRP(<App />);
+    expect(history.location.pathname).toBe('/seller/orders');
   });
 });

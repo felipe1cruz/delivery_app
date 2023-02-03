@@ -2,41 +2,41 @@ const { generateToken } = require('../../utils/JWT');
 
 const validUser = {
   name: 'Joselito Hermes',
-  senha: 'Sem Noção',
+  passwordPlain: 'Sem Noção',
   email: 'candidato@semnocao.com',
 };
 
 const invalidUser = {
   name: 'Renato',
-  senha: '1234',
+  passwordPlain: '1234',
   email: 'vi@rus@sem.no.cao.com',
 };
 
 const customerUser = {
   id: 3,
   name: 'Cliente Zé Birita',
-  senha: '$#zebirita#$',
+  passwordPlain: '$#zebirita#$',
   email: 'zebirita@email.com',
   role: 'customer',
-  senhaCriptografada: '1c37466c159755ce1fa181bd247cb925',
+  password: '1c37466c159755ce1fa181bd247cb925',
 };
 
 const adminUser = {
   id: 1,
   name: 'Delivery App Admin',
-  senha: '--adm2@21!!--',
+  passwordPlain: '--adm2@21!!--',
   email: 'adm@deliveryapp.com',
   role: 'administrator',
-  senhaCriptografada: 'a4c86edecc5aee06eff8fdeda69e0d04',
+  password: 'a4c86edecc5aee06eff8fdeda69e0d04',
 };
 
 const sellerUser = {
   id: 2,
   name: 'Fulana Pereira',
-  senha: 'fulana@123',
+  passwordPlain: 'fulana@123',
   email: 'fulana@deliveryapp.com',
   role: 'seller',
-  senhaCriptografada: '3c28d2b0881bf46457a853e0b07531c6',
+  password: '3c28d2b0881bf46457a853e0b07531c6',
 };
 
 const findOneUser = (user) => {
@@ -49,6 +49,11 @@ const loginRes = (user) => {
  return response;
 };
 
+const mockCreateUser = (user) => {
+  return { dataValues: 
+    { id: user.id, name: user.name, email: user.email, password: user.password, role: user.role } };
+};
+
 module.exports = {
   validUser,
   invalidUser,
@@ -57,4 +62,5 @@ module.exports = {
   sellerUser,
   findOneUser,
   loginRes,
+  mockCreateUser,
 };

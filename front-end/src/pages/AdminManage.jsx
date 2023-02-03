@@ -5,35 +5,44 @@ import dataTestsId from '../utils/dataTests/dataTestId';
 import dataTestsNoId from '../utils/dataTests/dataTestNoId';
 
 function AdminManage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setSelectRole] = useState('');
-  // const [createUserSet, msgCreateUserSet] = useState('');
   const [listaUsers, setListUsers] = useState([]);
   const [disableBtn, setDisableBtn] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState(true);
   const [okMessage, setOkMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [userNew, setUserNew] = useState({
+    name: '', email: '', password: '', role: '',
+  });
   // const errorMessage = 'Algo deu errado';
-
-  const handleChange = (target) => {
-    const { id, value } = target;
-    if (id === 'nameId') setName(value);
-    if (id === 'emailId') setEmail(value);
-    if (id === 'passwordId') setPassword(value);
-  };
 
   function emailRegex(validEmailTest) {
     const regex = /^[a-z0-9-_.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/ig;
     return regex.test(validEmailTest);
   }
 
-  const getName = () => {
-    let data = localStorage.getItem('user');
-    data = JSON.parse(data);
-    setName(data.name);
+  const fieldsValidation = () => {
+    const rangeName = 12;
+    const rangePassword = 6;
+    const validEmail = emailRegex(userNew.email);
+    const validName = userNew.name.length >= rangeName;
+    const validPassword = userNew.password.length >= rangePassword;
+    const selects = userNew.role.length > 0;
+    if (validEmail && validName && validPassword && selects) {
+      setDisableBtn(true);
+    } else {
+      setDisableBtn(false);
+    }
   };
+
+  const handleChange = ({ target }) => {
+    const { name, value } = target;
+    setUserNew({ ...userNew, [name]: value });
+    fieldsValidation();
+  };
+
+  useEffect(() => {
+    fieldsValidation();
+  }, [userNew]);
 
   const getUsers = async () => {
     const data = await requestData('/users');
@@ -41,33 +50,21 @@ function AdminManage() {
   };
 
   useEffect(() => {
-    getName();
+    // getName();
     getUsers();
   }, []);
 
-  const userRegisterAdmin = async () => {
+  const userRegisterAdmin = async (e) => {
+    e.preventDefault();
     try {
-      // await requestLogin('/login', { email, password });
-      await requestLogin('/createPanelAdmin', { name, email, password, role });
+      await requestLogin('/createPanelAdmin', userNew);
       setOkMessage('Uhuu! Usuário cadastrado');
-    } catch (error) {
       setInvalidMessage(false);
+    } catch (error) {
       setErrorMessage('Ops! Algo deu errado');
+      setInvalidMessage(true);
     }
   };
-
-  useEffect(() => {
-    const fieldsValidation = () => {
-      const rangeName = 12;
-      const rangePassword = 6;
-      const validEmail = emailRegex(email);
-      const validName = name.length >= rangeName;
-      const validPassword = password.length >= rangePassword;
-      const selects = role.length !== 0;
-      return (validEmail && validName && validPassword && selects);
-    };
-    setDisableBtn(fieldsValidation());
-  }, [password, role, email, name]);
 
   return (
     <div>
@@ -80,9 +77,9 @@ function AdminManage() {
               data-testid={ dataTestsNoId().inputName }
               type="text"
               id="nameId"
+              name="name"
               placeholder="Nome"
-              value={ name }
-              onChange={ (e) => handleChange(e.target) }
+              onChange={ handleChange }
             />
           </label>
           <label htmlFor="emailId">
@@ -91,9 +88,9 @@ function AdminManage() {
               data-testid={ dataTestsNoId().inputEmail }
               type="email"
               id="emailId"
+              name="email"
               placeholder="Email"
-              value={ email }
-              onChange={ (e) => handleChange(e.target) }
+              onChange={ handleChange }
             />
           </label>
           <label htmlFor="passwordId">
@@ -102,22 +99,22 @@ function AdminManage() {
               data-testid={ dataTestsNoId().inputPassword }
               type="password"
               id="passwordId"
+              name="password"
               placeholder="Senha"
-              value={ password }
-              onChange={ (e) => handleChange(e.target) }
+              onChange={ handleChange }
             />
           </label>
           <select
             name="role"
             id="roleId"
             data-testid={ dataTestsNoId().inputRole }
-            onChange={ (e) => setSelectRole(e.target.value) }
+            onChange={ handleChange }
           >
             <option
-              value="empy"
+              value="empyt"
               id="roleId"
               defaultValue="role"
-              disable
+              disabled
               hidden
             >
               ---Role---
@@ -144,7 +141,7 @@ function AdminManage() {
           <button
             data-testid={ dataTestsId('').buttonRegister }
             type="button"
-            onClick={ () => userRegisterAdmin() }
+            onClick={ (e) => userRegisterAdmin(e) }
             disabled={ !disableBtn }
           >
             Cadastrar

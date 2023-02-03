@@ -14,7 +14,7 @@ function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [disableRegisterBtn, setDisableBtn] = useState(false);
+  const [disableRegisterBtn, setDisableBtn] = useState(true);
   const [invalidMessage, setInvalidMessage] = useState(true);
   const history = useHistory();
 
@@ -51,8 +51,9 @@ function Register() {
       const validPassword = password.length >= rangePassword;
       return (validEmail && validName && validPassword);
     };
-    setDisableBtn(fieldsValidation());
-    setInvalidMessage(false);
+    const fieldsState = fieldsValidation();
+    setDisableBtn(!fieldsState);
+    setInvalidMessage(fieldsState);
   }, [name, email, password]);
 
   return (
@@ -97,7 +98,7 @@ function Register() {
         <button
           data-testid={ testIdBtnRegister }
           type="button"
-          disabled={ !disableRegisterBtn }
+          disabled={ disableRegisterBtn }
           onClick={ () => userRegister() }
         >
           Cadastrar

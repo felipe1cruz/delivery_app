@@ -1,23 +1,25 @@
 import stringGenerator from '../helpers/stringGenerator';
+import tokenGenerator from '../helpers/tokenGenerator';
 
 const minValidLengthOfUserName = 12;
 const minValidLengthOfPassword = 6;
 const randomEmailLength = 8;
 
 const validUser = {
-  nome: stringGenerator(minValidLengthOfUserName),
+  name: stringGenerator(minValidLengthOfUserName),
   senha: stringGenerator(minValidLengthOfPassword),
   email: `${stringGenerator(randomEmailLength)}@email.com`,
 };
 
 const invalidUser = {
-  nome: 'Renato',
+  name: 'Renato',
   senha: '1234',
   email: 'vi@rus@sem.no.cao.com',
 };
 
 const customerUser = {
-  nome: 'Cliente Zé Birita',
+  id: 3,
+  name: 'Cliente Zé Birita',
   senha: '$#zebirita#$',
   email: 'zebirita@email.com',
   role: 'customer',
@@ -25,7 +27,8 @@ const customerUser = {
 };
 
 const adminUser = {
-  nome: 'Delivery App Admin',
+  id: 1,
+  name: 'Delivery App Admin',
   senha: '--adm2@21!!--',
   email: 'adm@deliveryapp.com',
   role: 'administrator',
@@ -33,11 +36,19 @@ const adminUser = {
 };
 
 const sellerUser = {
-  nome: 'Fulana Pereira',
+  id: 2,
+  name: 'Fulana Pereira',
   senha: 'fulana@123',
   email: 'fulana@deliveryapp.com',
   role: 'seller',
   senhaCriptografada: '3c28d2b0881bf46457a853e0b07531c6',
+};
+
+const setUserLocalStorage = (user) => {
+  const { id, name, email, role } = user;
+  const localData = { name, email, role };
+  localData.token = tokenGenerator({ id, name, email, role });
+  return localData;
 };
 
 export {
@@ -46,4 +57,5 @@ export {
   customerUser,
   adminUser,
   sellerUser,
+  setUserLocalStorage,
 };

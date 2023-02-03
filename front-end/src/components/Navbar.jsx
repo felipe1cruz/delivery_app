@@ -5,7 +5,7 @@ import Context from '../context/Context';
 function Navbar() {
   const {
     // token,
-    setToken,
+    setToken2,
     // pageCheckout,
     // setPageCheckout,
   } = useContext(Context);
@@ -14,7 +14,7 @@ function Navbar() {
 
   const logout = () => {
     localStorage.clear('user');
-    setToken('');
+    setToken2('');
     history.push('/');
     // setPageCheckout(false);
   };

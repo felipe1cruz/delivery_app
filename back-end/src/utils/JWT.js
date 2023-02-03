@@ -15,6 +15,10 @@ const generateToken = (user) => {
   return token;
 };
 
+const tokenDescrypt = (token) => {
+  return jwt.decode(token);
+};
+
 const authenticateToken = async (token, _next) => {
   if (!token) {
     const status = 401;
@@ -22,7 +26,7 @@ const authenticateToken = async (token, _next) => {
     throw errorGenerate(status, message);
   } 
   try {
-    const validateToken = await jwt.verify(token, JWT_SECRET);
+    const validateToken = jwt.verify(token, JWT_SECRET);
     return validateToken;
   } catch (error) {
     const status = 401;
@@ -34,4 +38,5 @@ const authenticateToken = async (token, _next) => {
 module.exports = {
   generateToken,
   authenticateToken,
+  tokenDescrypt,
 };

@@ -6,7 +6,7 @@ import dataTestsNoId from '../utils/dataTests/dataTestNoId';
 function NavbarAdmin() {
   const [nameNavBar, setNameNavBar] = useState('');
   const history = useHistory();
-  const { setToken } = useContext(Context);
+  const { setToken2 } = useContext(Context);
 
   const goAdminManager = () => {
     history.push('/admin/manage');
@@ -20,7 +20,7 @@ function NavbarAdmin() {
 
   const logout = () => {
     localStorage.clear('user');
-    setToken('');
+    setToken2('');
     history.push('/');
   };
 

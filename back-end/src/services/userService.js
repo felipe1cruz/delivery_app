@@ -24,6 +24,7 @@ const authenticate = async (userEmail, userPassword) => {
   if (!user) throw errorGenerate(404, 'Not found');
 
   const token = generateToken(user.dataValues);
+
   const { id, name, email, role } = user.dataValues;
   return { id, name, email, role, token };
 };
@@ -52,7 +53,6 @@ const createUserPanelAdmin = async (body) => {
       email,
     },
   });
-
   if (checkCreatedUsers) {
     throw errorGenerate(409, 'User already registered');
   }
@@ -78,10 +78,19 @@ const getUsers = async () => {
   return users;
 };
 
+const getUserId = async (name) => {
+  const users = await User.findOne({
+    attributes: ['name', 'email', 'role'],
+    where: { name }
+  });
+  return users;
+};
+
 module.exports = {
   authenticate,
   createUser,
   getSellers,
   getUsers,
   createUserPanelAdmin,
+  getUserId
 };

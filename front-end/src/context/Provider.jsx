@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Context from './Context';
 
 function Provider({ children }) {
-  const [token, setToken] = useState('');
+  const [token, setToken2] = useState('');
   const [products, setProducts] = useState([]);
   const [quantity, setQuantity] = useState([]);
   const [cardValuePrinces, setCardValuePrinces] = useState(0);
@@ -14,7 +14,7 @@ function Provider({ children }) {
 
   const memorize = React.useMemo(() => ({
     token,
-    setToken,
+    setToken2,
     pageCheckout,
     setPageCheckout,
     products,
@@ -31,7 +31,7 @@ function Provider({ children }) {
     setOrdersList,
   }), [
     token,
-    setToken,
+    setToken2,
     pageCheckout,
     setPageCheckout,
     products,

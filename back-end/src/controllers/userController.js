@@ -1,4 +1,5 @@
 const userService = require('../services/userService');
+const { authenticateToken, tokenDescrypt } = require('../utils/JWT');
 
 const user = async (req, res, next) => {
   try {
@@ -20,15 +21,17 @@ const createUser = async (req, res, next) => {
 };
 
 const createUserPanelAdmin = async (req, res, next) => {
-  console.log('Controller', req.body);
-  // const token = req.headers.authorization;
-  // const jwtVery = jwt.verify(token, 'segredoJWT')
+  const { userNew, tokemLocal } = req.body;
+  const { authorization } = req.headers;
+  const tokenToAdmin = tokenDescrypt(authorization);
   try {
-    const date = await userService.createUserPanelAdmin(req.body);
-    if (!date) {
+    if (tokenToAdmin.role !== 'administrator') {
       return res.status(409).json('Conflict');
+    } else {
+      const data = await userService.createUserPanelAdmin(userNew);
+      console.log(data);
+      return res.status(201).json('created');
     }
-    return res.status(201).json('created'); 
   } catch (error) {
     next(error);
   }

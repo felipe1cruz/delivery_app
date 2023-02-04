@@ -19,9 +19,11 @@ const dataTestsId = (productId) => {
 
   const prefixAdmin = 'admin_manage__';
 
-  const itemList = `${prefixAdmin}element-user-table-item-number-${productId}`;
   const nomeList = `${prefixAdmin}input-email-${productId}`;
-  const emailList = `${prefixAdmin}element-user-table-email`;
+
+  const itemList = `${prefixAdmin}element-user-table-item-number-${productId}`;
+  const emailList = `${prefixAdmin}element-user-table-email-${productId}`;
+  const namelList = `${prefixAdmin}element-user-table-name-${productId}`;
   const tipoList = `${prefixAdmin}element-user-table-role-${productId}`;
   const excluirList = `${prefixAdmin}element-user-table-remove-${productId}`;
 
@@ -44,6 +46,7 @@ const dataTestsId = (productId) => {
     tipoList,
     excluirList,
     buttonRegister,
+    namelList,
   };
 };
 

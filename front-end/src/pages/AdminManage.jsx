@@ -8,12 +8,10 @@ function AdminManage() {
   const [listaUsers, setListUsers] = useState([]);
   const [disableBtn, setDisableBtn] = useState(false);
   const [invalidMessage, setInvalidMessage] = useState(true);
-  const [okMessage, setOkMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [userNew, setUserNew] = useState({
     name: '', email: '', password: '', role: '',
   });
-  // const errorMessage = 'Algo deu errado';
 
   function emailRegex(validEmailTest) {
     const regex = /^[a-z0-9-_.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/ig;
@@ -52,17 +50,18 @@ function AdminManage() {
   useEffect(() => {
     // getName();
     getUsers();
-  }, []);
+  }, [listaUsers]);
 
   const userRegisterAdmin = async (e) => {
     e.preventDefault();
+    const getToken = JSON.parse(localStorage.getItem('user'));
+    const { token } = getToken;
+    const tokemLocal = token;
     try {
-      await requestLogin('/createPanelAdmin', userNew);
-      setOkMessage('Uhuu! Usuário cadastrado');
-      setInvalidMessage(false);
+      await requestLogin('/createPanelAdmin', { userNew, tokemLocal });
     } catch (error) {
       setErrorMessage('Ops! Algo deu errado');
-      setInvalidMessage(true);
+      setInvalidMessage(false);
     }
   };
 
@@ -150,7 +149,7 @@ function AdminManage() {
         {' '}
         <div hidden={ invalidMessage }>
           <p data-testid={ dataTestsNoId().invalidButtonRegister }>
-            { okMessage || errorMessage }
+            { errorMessage }
           </p>
         </div>
         <section>
@@ -173,13 +172,13 @@ function AdminManage() {
                 { ' ' }
               </span>
               <span
-                data-testid={ dataTestsId(index + 1).nomeList }
+                data-testid={ dataTestsId(index + 1).namelList }
               >
                 { listaUser.name }
                 { ' ' }
               </span>
               <span
-                data-testid={ dataTestsId('').emailList }
+                data-testid={ dataTestsId(index + 1).emailList }
               >
                 { listaUser.email }
                 { ' ' }

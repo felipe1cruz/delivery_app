@@ -4,7 +4,7 @@ import Context from '../context/Context';
 const testIdItemNumber = 'customer_order_details__element-order-table-item-number-';
 const testIdTableName = 'customer_order_details__element-order-table-name-';
 const testIdTableQnt = 'customer_order_details__element-order-table-quantity-';
-const testIdTableUnitPrice = 'ustomer_order_details__element-order-table-unit-price-';
+const testIdTableUnitPrice = 'customer_order_details__element-order-table-unit-price-';
 const testIdTableSubTotal = 'customer_order_details__element-order-table-sub-total-';
 const testIdTotal = 'customer_order_details__element-order-total-price';
 
@@ -51,7 +51,6 @@ function OrdersList() {
   const tableRow = () => (
     ordersList.map((ma, index) => (
       <tr key={ index } style={ { margin: '10px' } }>
-        { console.log(index) }
         <td data-testid={ `${testIdItemNumber}${index}` }>{ index + 1 }</td>
         <td data-testid={ `${testIdTableName}${index}` }>{ ma.name }</td>
         <td data-testid={ `${testIdTableQnt}${index}` }>{ ma.qtds }</td>
@@ -61,7 +60,7 @@ function OrdersList() {
           { currencyBrl(roundValue(ma.price)) }
         </td>
         <td
-          data-testid={ `${testIdTableSubTotal}${index}` }
+          data-testid={ `${testIdTableSubTotal}${index + 1}` }
         >
           { currencyBrl(roundValue(ma.price * ma.qtds)) }
         </td>

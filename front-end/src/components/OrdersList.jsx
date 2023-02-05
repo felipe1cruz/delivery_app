@@ -50,12 +50,12 @@ function OrdersList() {
 
   const tableRow = () => (
     ordersList.map((ma, index) => (
-      <tr key={ index } style={ { margin: '10px' } }>
-        <td data-testid={ `${testIdItemNumber}${index}` }>{ index + 1 }</td>
-        <td data-testid={ `${testIdTableName}${index}` }>{ ma.name }</td>
-        <td data-testid={ `${testIdTableQnt}${index}` }>{ ma.qtds }</td>
+      <tr key={ index + 1 } style={ { margin: '10px' } }>
+        <td data-testid={ `${testIdItemNumber}${index + 1}` }>{ index + 1 }</td>
+        <td data-testid={ `${testIdTableName}${index + 1}` }>{ ma.name }</td>
+        <td data-testid={ `${testIdTableQnt}${index + 1}` }>{ ma.qtds }</td>
         <td
-          data-testid={ `${testIdTableUnitPrice}${index}` }
+          data-testid={ `${testIdTableUnitPrice}${index + 1}` }
         >
           { currencyBrl(roundValue(ma.price)) }
         </td>

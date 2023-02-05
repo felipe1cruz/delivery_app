@@ -72,23 +72,25 @@ function CustomerCheckout() {
   };
 
   const submitButton = async () => {
-    const endpointCheckout = '/customer/checkout';
-    const getToken = localStorage.getItem('user');
-    const getTokenParse = JSON.parse(getToken);
-    setToken(getTokenParse.token);
-    const newSale = {
-      userId: userId.id,
-      sellerId: sellerId[0],
-      totalPrice,
-      deliveryAddress,
-      deliveryNumber,
-    };
-    const newPro = products.map((product) => ({
-      productId: product.id,
-      quantity: product.qtds,
-    }));
-    const retorno = await postSales(endpointCheckout, { newSale, newPro });
-    history.push(`/customer/orders/${retorno.rec.id}`);
+    if (sellerId > 1) {
+      const endpointCheckout = '/customer/checkout';
+      const getToken = localStorage.getItem('user');
+      const getTokenParse = JSON.parse(getToken);
+      setToken(getTokenParse.token);
+      const newSale = {
+        userId: userId.id,
+        sellerId: sellerId[0],
+        totalPrice,
+        deliveryAddress,
+        deliveryNumber,
+      };
+      const newPro = products.map((product) => ({
+        productId: product.id,
+        quantity: product.qtds,
+      }));
+      const retorno = await postSales(endpointCheckout, { newSale, newPro });
+      history.push(`/customer/orders/${retorno.rec.id}`);
+    }
   };
 
   const rmButton = (name) => {
@@ -150,6 +152,9 @@ function CustomerCheckout() {
         data-testid={ testIdSellerSelect }
         onChange={ (e) => setSellerId(e.target.value) }
       >
+        <option value={ 1 }>
+          --Vendedores--
+        </option>
         {sellers.map((seller, i) => (
           <option
             value={ seller.id }

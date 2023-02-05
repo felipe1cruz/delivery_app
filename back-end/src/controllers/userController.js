@@ -1,4 +1,5 @@
 const userService = require('../services/userService');
+const { tokenDescrypt } = require('../utils/JWT');
 
 const user = async (req, res, next) => {
   try {
@@ -13,6 +14,22 @@ const user = async (req, res, next) => {
 const createUser = async (req, res, next) => {
   try {
     await userService.createUser(req.body);
+    return res.status(201).json('created');
+  } catch (error) {
+    next(error);
+  }
+};
+
+const createUserPanelAdmin = async (req, res, next) => {
+  const { userNew } = req.body;
+  const { authorization } = req.headers;
+  const tokenToAdmin = tokenDescrypt(authorization);
+  try {
+    if (tokenToAdmin.role !== 'administrator') {
+      return res.status(409).json('Conflict');
+    } 
+    const data = await userService.createUserPanelAdmin(userNew);
+    console.log(data);
     return res.status(201).json('created');
   } catch (error) {
     next(error);
@@ -38,9 +55,20 @@ const getSellers = async (req, res, next) => {
   }
 };
 
+const getUsers = async (_req, res, next) => {
+  try {
+    const users = await userService.getUsers();
+    return res.status(201).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   user,
   createUser,
   getSellers,
   getUserId,
+  getUsers,
+  createUserPanelAdmin,
 };

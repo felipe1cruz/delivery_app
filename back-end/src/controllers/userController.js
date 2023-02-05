@@ -28,7 +28,7 @@ const createUserPanelAdmin = async (req, res, next) => {
     if (tokenToAdmin.role !== 'administrator') {
       return res.status(409).json('Conflict');
     } 
-    const data = await userService.createUserPanelAdmin(userNew);
+    await userService.createUserPanelAdmin(userNew);
     return res.status(201).json('created');
   } catch (error) {
     next(error);

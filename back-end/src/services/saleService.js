@@ -7,8 +7,8 @@ const getSaleBuId = async (id) => {
     },
   });
   return getByid;
-}
+};
 
 module.exports = {
   getSaleBuId,
-}
+};

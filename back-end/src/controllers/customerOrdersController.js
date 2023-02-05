@@ -24,10 +24,7 @@ const updateSalesId = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    console.log('update id', id);
-    console.log('update status', status);
     const saleUpdate = await customerOrdersService.updateSalesId(id, status);
-    console.log(saleUpdate);
     return res.status(200).json(saleUpdate);
   } catch (error) {
     next(error);

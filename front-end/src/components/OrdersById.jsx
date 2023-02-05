@@ -1,38 +1,60 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Context from '../context/Context';
 import { requestData } from '../services/requests';
-import dataTestsId from '../utils/dataTests/dataTestId';
+// import dataTestsId from '../utils/dataTests/dataTestId';
 import OrdersList from './OrdersList';
 
 function OrdersById() {
   const {
-    pageOrdersIds,
-    setPageOrdersIds,
+    // pageOrdersIds,
+    // setPageOrdersIds,
     setOrdersList,
   } = useContext(Context);
+  const [isDisabled, setisDisabled] = useState(true);
+  const [listPageOrders, setListPageOrders] = useState(true);
+
+  const prefix = 'customer_order_details__';
+  const deLabelOrderId = `${prefix}element-order-details-label-order-id`;
+  const deLabelsellerName = `${prefix}element-order-details-label-seller-name`;
+  const deLabelOrderdate = `${prefix}element-order-details-label-order-date`;
+  const deLabelDeliveryStatus = `${prefix}element-order-details-label-delivery-status`;
+  const deLabelDeliveryCheck = `${prefix}button-delivery-check`;
 
   const history = useHistory();
 
   const historyLocOath = history.location.pathname;
 
+  const formarData = (ma) => {
+    const dia = ma.saleDate.split('-')[2].split('T')[0];
+    const mes = ma.saleDate.split('-')[1];
+    const ano = ma.saleDate.split('-')[0];
+    return `${dia}/${mes}/${ano}`;
+  };
+
   const pageOrdersIdGet = async () => {
     const sales = await requestData(historyLocOath);
-    const requestSallers = await requestData('/sellers');
-    const requestSalesProducts = await requestData(`/salesProducts/${sales.id}`);
-    const requestProducts = await requestData('/customer/products');
-    setPageOrdersIds({
-      id: sales.id,
-      seller: requestSallers[0].name,
-      saleDate: sales.saleDate,
+    const reqSallers = await requestData('/sellers');
+    const reqSalesProducts = await requestData(`/salesProducts/${sales.id}`);
+    const reqSalesById = await requestData(`/sale/${sales.id}`);
+    const reqProducts = await requestData('/customer/products');
+    setListPageOrders({
+      id: reqSalesById.id,
+      seller: reqSallers.filter((fil) => fil.id === reqSalesById.sellerId)[0].name,
+      saleDate: formarData(sales),
       status: sales.status,
     });
-    const ver = requestSalesProducts.map((ma) => ({
-      name: requestProducts.filter((fil) => fil.id === ma.productId)[0].name,
+    const ver = reqSalesProducts.map((ma) => ({
+      name: reqProducts.filter((fil) => fil.id === ma.productId)[0].name,
       qtds: ma.quantity,
-      price: requestProducts.filter((fil) => fil.id === ma.productId)[0].price,
+      price: reqProducts.filter((fil) => fil.id === ma.productId)[0].price,
     }));
     setOrdersList(ver);
+  };
+
+  const submitButtonId = () => {
+    setisDisabled(true);
+    pageOrdersIdGet();
   };
 
   useEffect(() => {
@@ -40,45 +62,41 @@ function OrdersById() {
   }, []);
 
   return (
-    <div key={ pageOrdersIds.id }>
-      <div
-        data-testid={ dataTestsId(pageOrdersIds.id).orderId }
-      >
-        <div>
-          Detalhe do Pedido
-        </div>
-        <div>
+    <div key={ listPageOrders.id }>
+      <div>
+        Detalhe do Pedido
+        <br />
+        <div data-testid={ deLabelOrderId }>
           PEDIDO:
           { ' ' }
-          <span
-            data-testid={ dataTestsId(pageOrdersIds.id).orderId }
-          >
-            { pageOrdersIds.id }
-          </span>
+          { listPageOrders.id }
         </div>
         <div
-          data-testid={ dataTestsId(pageOrdersIds.id).orderSeller }
+          data-testid={ deLabelsellerName }
         >
-          { pageOrdersIds.seller }
+          { listPageOrders.seller }
         </div>
         <div
-          data-testid={ dataTestsId(pageOrdersIds.id).orderDate }
+          data-testid={ deLabelOrderdate }
         >
-          { pageOrdersIds.saleDate }
+          { listPageOrders.saleDate }
         </div>
         <div
-          data-testid={ dataTestsId(pageOrdersIds.id).orderStatus }
+          data-testid={ deLabelDeliveryStatus }
         >
-          { pageOrdersIds.status }
+          { listPageOrders.status }
         </div>
         <button
           type="submit"
-          // onClick={ () => submitButtonId(ma.id) }
+          data-testid={ deLabelDeliveryCheck }
+          onClick={ () => submitButtonId() }
+          disabled={ !isDisabled }
         >
           MARCAR COMO ENTREGUE
         </button>
       </div>
       <div>
+        <br />
         <OrdersList />
       </div>
     </div>

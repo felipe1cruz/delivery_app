@@ -79,7 +79,6 @@ function OrdersList() {
         </tbody>
       </table>
       <div data-testid={ testIdTotal }>
-        <br />
         { `Total: ${currencyBrl(totalPrice)}` }
       </div>
     </div>

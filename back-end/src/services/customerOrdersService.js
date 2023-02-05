@@ -15,8 +15,6 @@ const getSalesId = async (id) => {
 };
 
 const updateSalesId = async (id, status) => {
-  console.log('update service id', id);
-  console.log('update service status', status);
   const saleUpdate = await Sales.update(
     { status },
     { where: { id } },

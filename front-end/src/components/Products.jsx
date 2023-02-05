@@ -148,7 +148,6 @@ function Products() {
               product.price,
             ) }
           />
-          { console.log() }
           <button
             type="button"
             data-testid={ dataTestsId(product.id).cardAddItem }

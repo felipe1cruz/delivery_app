@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import NavbarSeller from '../components/NavbarSeller';
 import { requestData } from '../services/requests';
 
 function SellerOrders() {
@@ -35,13 +35,19 @@ function SellerOrders() {
   };
 
   const handleClick = (id) => {
-    console.log('id', id);
     history.push(`/seller/orders/${id}`);
+  };
+
+  const formarData = (ma) => {
+    const dia = ma.saleDate.split('-')[2].split('T')[0];
+    const mes = ma.saleDate.split('-')[1];
+    const ano = ma.saleDate.split('-')[0];
+    return `${dia}/${mes}/${ano}`;
   };
 
   return (
     <div>
-      <Navbar />
+      <NavbarSeller />
       { sellerOrders.map((ma, index) => (
         <button
           key={ ma.id || index }
@@ -53,7 +59,8 @@ function SellerOrders() {
             data-testid={ dataTestsId(ma.id).testIdSellerOrder }
             id={ ma.id }
           >
-            {`Pedido ${index + 1}`}
+            Pedido
+            <span>{ index + 1 }</span>
           </div>
           <div
             data-testid={ dataTestsId(ma.id).testIdDeliveryStatus }
@@ -65,13 +72,13 @@ function SellerOrders() {
             data-testid={ dataTestsId(ma.id).testIdOrderDate }
             id={ ma.id }
           >
-            {ma.saleDate}
+            { formarData(ma) }
           </div>
           <div
             data-testid={ dataTestsId(ma.id).testIdPrice }
             id={ ma.id }
           >
-            {formatarMoeda(ma.totalPrice)}
+            { formatarMoeda(ma.totalPrice) }
           </div>
           <div
             data-testid={ dataTestsId(ma.id).testIdAddress }

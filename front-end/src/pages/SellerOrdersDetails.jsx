@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import { useParams, useHistory } from 'react-router-dom';
+import NavbarSeller from '../components/NavbarSeller';
 import { requestData, updateSales } from '../services/requests';
 
 function SellerOrdersDetails() {
@@ -33,11 +33,14 @@ function SellerOrdersDetails() {
     };
   };
 
+  const history = useHistory();
+
   const statusPedido = async (newStatus) => {
     if (newStatus === 'Preparando' || newStatus === emTransito) setPreparando(true);
     if (newStatus === transito) setTransito(true);
     await updateSales(`/salesProducts/${id}`, { status: newStatus });
     setStatus(newStatus);
+    history.push('/seller/orders');
   };
 
   const formarData = (ma) => {
@@ -45,7 +48,6 @@ function SellerOrdersDetails() {
       const dia = ma.split('-')[2].split('T')[0];
       const mes = ma.split('-')[1];
       const ano = ma.split('-')[0];
-      console.log(`${dia}/${mes}/${ano}`);
       return `${dia}/${mes}/${ano}`;
     }
   };
@@ -66,10 +68,14 @@ function SellerOrdersDetails() {
   }, [orderId]);
 
   useEffect(() => {
+    setStatus(orderId.status);
+    setData(orderId.saleDate);
+  }, [orderId]);
+
+  useEffect(() => {
   }, [status, setStatus]);
 
   useEffect(() => {
-    console.log('data', data);
   }, [data, setData, formarData]);
 
   useEffect(() => {
@@ -104,14 +110,9 @@ function SellerOrdersDetails() {
     return `R$ ${moeda}`;
   };
 
-  //   const handleClick = (id) => {
-  //     console.log('id', id);
-  //     history.push(`/seller/orders/${id}`);
-  //   };
-
   return (
     <div>
-      <Navbar />
+      <NavbarSeller />
       <h2>Detalhes do Pedido</h2>
       <span
         data-testId="seller_order_details__element-order-details-label-order-id"
@@ -184,7 +185,9 @@ function SellerOrdersDetails() {
       <div
         data-testid="seller_order_details__element-order-total-price"
       >
-        {`TOTAL ${formatarMoeda(total.toFixed(2))}`}
+        TOTAL
+        { ' ' }
+        <span>{formatarMoeda(total.toFixed(2))}</span>
       </div>
     </div>
   );

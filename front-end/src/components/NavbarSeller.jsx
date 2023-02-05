@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import dataTestsNoId from '../utils/dataTests/dataTestNoId';
 
 function NavbarAdmin() {
   const [nameNavBar, setNameNavBar] = useState('');
   const history = useHistory();
 
   const goAdminManager = () => {
-    history.push('/admin/manage');
+    history.push('/seller/orders');
   };
 
   const getName = () => {
     let data = localStorage.getItem('user');
     data = JSON.parse(data);
     setNameNavBar(data.name);
-    if (data.role !== 'administrator') {
-      localStorage.clear('user');
-      history.push('/login');
-    }
   };
 
   const logout = () => {
@@ -33,20 +28,20 @@ function NavbarAdmin() {
     <section>
       <button
         type="button"
-        data-testid={ dataTestsNoId().navbarLinkOrders }
+        data-testid="customer_products__element-navbar-link-orders"
         onClick={ () => goAdminManager() }
       >
-        GERENCIAR USUÁRIOS
+        PEDIDOS
       </button>
       <span
-        data-testid={ dataTestsNoId().navbarUserFullName }
+        data-testid="customer_products__element-navbar-user-full-name"
       >
         { nameNavBar }
       </span>
 
       <button
         type="button"
-        data-testid={ dataTestsNoId().navbarLinkLogout }
+        data-testid="customer_products__element-navbar-link-logout"
         onClick={ () => logout() }
       >
         SAIR

@@ -13,7 +13,6 @@ const salesId = async (req, res, next) => {
   try {
     const { id } = req.params;
     const allSales = await customerOrdersService.getSalesId(id);
-    console.log(allSales);
     return res.status(200).json(allSales);
   } catch (error) {
     next(error);

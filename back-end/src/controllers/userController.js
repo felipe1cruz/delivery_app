@@ -29,7 +29,6 @@ const createUserPanelAdmin = async (req, res, next) => {
       return res.status(409).json('Conflict');
     } 
     const data = await userService.createUserPanelAdmin(userNew);
-    console.log(data);
     return res.status(201).json('created');
   } catch (error) {
     next(error);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import NavbarSeller from '../components/NavbarSeller';
 import { requestData, updateSales } from '../services/requests';
 
@@ -33,14 +33,14 @@ function SellerOrdersDetails() {
     };
   };
 
-  const history = useHistory();
+  // const history = useHistory();
 
   const statusPedido = async (newStatus) => {
     if (newStatus === 'Preparando' || newStatus === emTransito) setPreparando(true);
     if (newStatus === transito) setTransito(true);
     await updateSales(`/salesProducts/${id}`, { status: newStatus });
     setStatus(newStatus);
-    history.push('/seller/orders');
+    // history.push('/seller/orders');
   };
 
   const formarData = (ma) => {

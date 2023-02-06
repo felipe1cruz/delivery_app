@@ -1,22 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import Context from '../context/Context';
 
 function Navbar() {
-  const {
-    // token,
-    setToken2,
-    // pageCheckout,
-    // setPageCheckout,
-  } = useContext(Context);
   const history = useHistory();
   const [name, setName] = useState('');
 
   const logout = () => {
     localStorage.clear('user');
-    setToken2('');
     history.push('/');
-    // setPageCheckout(false);
   };
 
   const getName = () => {
@@ -35,7 +26,6 @@ function Navbar() {
 
   useEffect(() => {
     getName();
-    // tokenValidation();
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Context from '../context/Context';
-import { requestData } from '../services/requests';
+import { requestData, updateSales } from '../services/requests';
 // import dataTestsId from '../utils/dataTests/dataTestId';
 import OrdersList from './OrdersList';
 
@@ -52,7 +52,8 @@ function OrdersById() {
     setOrdersList(ver);
   };
 
-  const submitButtonId = () => {
+  const submitButtonId = async (id) => {
+    await updateSales(`/salesProducts/${id}`, { status: 'Entregue' });
     setisDisabled(true);
     pageOrdersIdGet();
   };
@@ -61,42 +62,51 @@ function OrdersById() {
     pageOrdersIdGet();
   }, []);
 
+  useEffect(() => {
+    if (listPageOrders.status === 'Em Trânsito') {
+      setisDisabled(false);
+    }
+    if (listPageOrders.status === 'Entregue') {
+      setisDisabled(true);
+    }
+    pageOrdersIdGet();
+  }, [listPageOrders]);
+
   return (
     <div key={ listPageOrders.id }>
       <div>
         Detalhe do Pedido
-        <br />
-        <div data-testid={ deLabelOrderId }>
+        <div>
           PEDIDO:
-          { ' ' }
-          { listPageOrders.id }
+          <span data-testid={ deLabelOrderId }>
+            { listPageOrders.id }
+          </span>
         </div>
-        <div
-          data-testid={ deLabelsellerName }
-        >
-          { listPageOrders.seller }
+        <div>
+          <span data-testid={ deLabelsellerName }>
+            { listPageOrders.seller }
+          </span>
         </div>
-        <div
-          data-testid={ deLabelOrderdate }
-        >
-          { listPageOrders.saleDate }
+        <div>
+          <span data-testid={ deLabelOrderdate }>
+            { listPageOrders.saleDate }
+          </span>
         </div>
-        <div
-          data-testid={ deLabelDeliveryStatus }
-        >
-          { listPageOrders.status }
+        <div>
+          <span data-testid={ deLabelDeliveryStatus }>
+            { listPageOrders.status }
+          </span>
         </div>
         <button
           type="submit"
           data-testid={ deLabelDeliveryCheck }
-          onClick={ () => submitButtonId() }
-          disabled={ !isDisabled }
+          onClick={ () => submitButtonId(listPageOrders.id) }
+          disabled={ isDisabled }
         >
           MARCAR COMO ENTREGUE
         </button>
       </div>
       <div>
-        <br />
         <OrdersList />
       </div>
     </div>

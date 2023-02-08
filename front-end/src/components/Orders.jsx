@@ -1,11 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Context from '../context/Context';
+import { requestData } from '../services/requests';
 import dataTestsId from '../utils/dataTests/dataTestId';
 
 function Orders() {
   const {
     pageOrders,
+    setPageOrders,
   } = useContext(Context);
 
   const history = useHistory();
@@ -20,6 +22,11 @@ function Orders() {
     const ano = ma.saleDate.split('-')[0];
     return `${dia}/${mes}/${ano}`;
   };
+
+  useEffect(() => {
+    requestData('/customer/orders')
+      .then((response) => setPageOrders(response));
+  }, [pageOrders]);
 
   return (
     pageOrders.map((ma) => (

@@ -6,16 +6,10 @@ import { requestData, updateSales } from '../services/requests';
 function SellerOrdersDetails() {
   const { id } = useParams();
   const [productsOrder, setProductsOrder] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [list, setList] = useState([]);
-  const [orderId, setOrderId] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [productsList, setProductsList] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [preparando, setPreparando] = useState(false);
   const [transito, setTransito] = useState(false);
-  const [status, setStatus] = useState('');
-  const [data, setData] = useState('');
-  const emTransito = 'Em Trânsito';
-  //   const history = useHistory();
 
   const dataTestsId = (index) => {
     const orderTable = `seller_order_details__element-order-table-item-number-${index}`;
@@ -32,16 +26,63 @@ function SellerOrdersDetails() {
       orderTableSub,
     };
   };
-
-  // const history = useHistory();
+  const emTransito = 'Em Trânsito';
+  const emTregue = 'Entregue';
+  const emPreparando = 'Preparando';
+  const emPendente = 'Pendente';
 
   const statusPedido = async (newStatus) => {
-    if (newStatus === 'Preparando' || newStatus === emTransito) setPreparando(true);
-    if (newStatus === transito) setTransito(true);
+    if (newStatus === emPreparando) {
+      setPreparando(false);
+      setTransito(true);
+    }
+    if (newStatus === emTransito) {
+      setTransito(true);
+    }
     await updateSales(`/salesProducts/${id}`, { status: newStatus });
     setStatus(newStatus);
-    // history.push('/seller/orders');
   };
+
+  const roundValue = (value) => {
+    const newValue = Math.round((value) * 100) / 100;
+    return newValue.toFixed(2);
+  };
+
+  const getInfos = async () => {
+    const response = await requestData(`/sale/${id}`);
+    const reqSalesProducts = await requestData(`/salesProducts/${response.id}`);
+    const reqProducts = await requestData('/customer/products');
+    const ver = reqSalesProducts.map((ma) => ({
+      name: reqProducts.filter((fil) => fil.id === ma.productId)[0].name,
+      qtds: ma.quantity,
+      price: reqProducts.filter((fil) => fil.id === ma.productId)[0].price,
+    }));
+    setProductsList(ver);
+    setProductsOrder(response);
+    const sum = ver.reduce((acc, ele) => {
+      acc += ele.qtds * ele.price;
+      return acc;
+    }, 0);
+    setTotalPrice(roundValue(sum));
+    return sum;
+  };
+
+  useEffect(() => {
+    if (productsOrder.status === emPendente) {
+      setTransito(true);
+      setPreparando(false);
+    }
+    if (productsOrder.status === emPreparando) {
+      setTransito(false);
+      setPreparando(true);
+    }
+    if (productsOrder.status === emTransito
+      || productsOrder.status === emTregue) {
+      setTransito(true);
+      setPreparando(true);
+    }
+    getInfos();
+  }, [productsOrder]);
 
   const formarData = (ma) => {
     if (ma) {
@@ -51,58 +92,6 @@ function SellerOrdersDetails() {
       return `${dia}/${mes}/${ano}`;
     }
   };
-
-  useEffect(() => {
-    requestData(`/customer/orders/${id}`)
-      .then((response) => setOrderId(response));
-    requestData(`/seller/orders/${id}`)
-      .then((response) => setProductsOrder(response));
-
-    requestData('/customer/products')
-      .then((response) => setProducts(response));
-  }, []);
-
-  useEffect(() => {
-    setStatus(orderId.status);
-    setData(orderId.saleDate);
-  }, [orderId]);
-
-  useEffect(() => {
-    setStatus(orderId.status);
-    setData(orderId.saleDate);
-  }, [orderId]);
-
-  useEffect(() => {
-  }, [status, setStatus]);
-
-  useEffect(() => {
-  }, [data, setData, formarData]);
-
-  useEffect(() => {
-    let lista = [];
-    let soma = 0;
-    productsOrder.map((productOrder) => {
-      products.map((product) => {
-        if (productOrder.productId === product.id) {
-          lista = [...lista, {
-            name: product.name,
-            quantity: productOrder.quantity,
-            price: Number(product.price),
-            subtotal: productOrder.quantity * product.price }];
-          soma = (productOrder.quantity * product.price) + soma;
-        }
-        return null;
-      });
-      return null;
-    });
-    setList(lista);
-    setTotal(soma);
-
-    if (orderId.status === 'Preparando'
-    || orderId.status === emTransito) setPreparando(true);
-    if (orderId.status === emTransito
-    || orderId.status === 'Pendente') setTransito(true);
-  }, [productsOrder, products, total]);
 
   const formatarMoeda = (num) => {
     let moeda = String(num);
@@ -115,23 +104,23 @@ function SellerOrdersDetails() {
       <NavbarSeller />
       <h2>Detalhes do Pedido</h2>
       <span
-        data-testId="seller_order_details__element-order-details-label-order-id"
+        data-testid="seller_order_details__element-order-details-label-order-id"
       >
-        {` Pedido ${id} `}
+        {` Pedido ${productsOrder.id} `}
       </span>
       <span
-        data-testId="seller_order_details__element-order-details-label-order-date"
+        data-testid="seller_order_details__element-order-details-label-order-date"
       >
-        { formarData(orderId.saleDate) }
+        { formarData(productsOrder.saleDate) }
       </span>
       <span
-        data-testId="seller_order_details__element-order-details-label-delivery-status"
+        data-testid="seller_order_details__element-order-details-label-delivery-status"
       >
-        { status }
+        { productsOrder.status }
       </span>
       <button
         type="button"
-        data-testId="seller_order_details__button-preparing-check"
+        data-testid="seller_order_details__button-preparing-check"
         disabled={ preparando }
         onClick={ () => statusPedido('Preparando') }
       >
@@ -139,13 +128,13 @@ function SellerOrdersDetails() {
       </button>
       <button
         type="button"
-        data-testId="seller_order_details__button-dispatch-check"
+        data-testid="seller_order_details__button-dispatch-check"
         disabled={ transito }
         onClick={ () => statusPedido('Em Trânsito') }
       >
         Saiu Para Entrega
       </button>
-      { list.map((ma, index) => (
+      { productsList.map((ma, index) => (
         <div
           key={ ma.id || index }
           id={ ma.id }
@@ -160,34 +149,38 @@ function SellerOrdersDetails() {
             data-testid={ dataTestsId(index).orderTableName }
             id={ ma.id }
           >
+            { ' - ' }
             {ma.name}
           </span>
           <span
             data-testid={ dataTestsId(index).orderTableQty }
             id={ ma.id }
           >
-            {ma.quantity}
+            { ' - ' }
+            {ma.qtds}
           </span>
           <span
             data-testid={ dataTestsId(index).orderTablePrice }
             id={ ma.id }
           >
+            { ' - ' }
             {formatarMoeda(ma.price)}
           </span>
           <span
             data-testid={ dataTestsId(index).orderTableSub }
             id={ ma.id }
           >
-            {formatarMoeda(ma.subtotal.toFixed(2))}
+            { ' - ' }
+            {formatarMoeda(roundValue(ma.price * ma.qtds))}
           </span>
         </div>
       )) }
-      <div
-        data-testid="seller_order_details__element-order-total-price"
-      >
-        TOTAL
+      <div>
+        TOTAL R$
         { ' ' }
-        <span>{formatarMoeda(total.toFixed(2))}</span>
+        <span data-testid="seller_order_details__element-order-total-price">
+          {formatarMoeda(totalPrice)}
+        </span>
       </div>
     </div>
   );

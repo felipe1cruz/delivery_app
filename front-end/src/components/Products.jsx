@@ -116,7 +116,7 @@ function Products() {
           </div>
           <img
             src={ product.urlImage }
-            alt={ product.urlImage }
+            alt={ product.name }
             data-testid={ dataTestsId(product.id).cardBgImage }
             width="100px"
           />

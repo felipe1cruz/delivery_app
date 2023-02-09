@@ -15,7 +15,7 @@ function getElementsOfInterest() {
   return { nome, email, senha, botaoCadastro, msgJaCadastrado };
 }
 
-describe('Avalia a Tela de Register', () => {
+describe('#### Avalia a Tela de Register ####', () => {
   beforeEach(() => {
     localStorage.clear();
     const { history } = renderWRP(<App />);

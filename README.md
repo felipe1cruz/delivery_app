@@ -49,7 +49,7 @@ As seguintes tecnologias foram aplicadas pelo grupo neste projeto:
 7. Após o término das rotinas do comando `npm start`, seu programa estará rodando e pronto para testar! Acesse-a em seu navegador utilizando o endereço `http://localhost:3000/`.
 8. Para testar e acessar como cliente, utilize as seguintes credenciais: 
    - Login: zebirita@email.com
-   - Senha: $#zebirita#$
+   - Senha: '$#zebirita#$' (sem aspas)
 
 9. Para testar e acessar como vendedor, utilize as seguintes credenciais: 
    - Login: fulana@deliveryapp.com

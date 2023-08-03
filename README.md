@@ -48,8 +48,8 @@ As seguintes tecnologias foram aplicadas pelo grupo neste projeto:
 6. Após instalar as dependências, execute o comando `npm start` na raiz do projeto. Isso migrará o banco de dados e iniciará o front-end e o back-end da aplicação.
 7. Após o término das rotinas do comando `npm start`, seu programa estará rodando e pronto para testar! Acesse-a em seu navegador utilizando o endereço `http://localhost:3000/`.
 8. Para testar e acessar como cliente, utilize as seguintes credenciais: 
-   - Login: 'zebirita@email.com'
-   - Senha: '$#zebirita#$'
+   - Login: zebirita@email.com
+   - Senha: $#zebirita#$
 
 9. Para testar e acessar como vendedor, utilize as seguintes credenciais: 
    - Login: fulana@deliveryapp.com
